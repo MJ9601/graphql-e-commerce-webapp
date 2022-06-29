@@ -2,5 +2,37 @@
   "name": "server",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/app.ts "
+  },
+  "dependencies": {
+    "@typegoose/typegoose": "^9.9.0",
+    "apollo-server": "^3.9.0",
+    "argon2": "^0.28.5",
+    "class-validator": "^0.13.2",
+    "config": "^3.3.7",
+    "cookie-parser": "^1.4.6",
+    "dayjs": "^1.11.3",
+    "dotenv": "^16.0.1",
+    "graphql": "15.x",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
+    "mongoose": "^6.4.1",
+    "nanoid": "3.3.1",
+    "pino": "^8.1.0",
+    "reflect-metadata": "^0.1.13",
+    "type-graphql": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/argon2": "^0.15.0",
+    "@types/config": "^0.0.41",
+    "@types/cookie-parser": "^1.4.3",
+    "@types/jsonwebtoken": "^8.5.8",
+    "@types/lodash": "^4.14.182",
+    "@types/pino": "^7.0.5",
+    "pino-pretty": "^8.1.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^4.7.4"
+  }
 }
