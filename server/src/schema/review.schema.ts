@@ -25,6 +25,10 @@ export const ReviewModel = getModelForClass<typeof Review>(Review);
 
 @InputType()
 export class CreateReviewInput {
+
+  @Field()
+  productId: string
+
   @Field()
   description: string;
 }
@@ -36,6 +40,9 @@ export class CreateRateInput {
   @Max(5)
   @Field()
   rate: number;
+
+  @Field()
+  productId: string
 }
 
 // mo
@@ -49,6 +56,9 @@ export class CreateRateAndReviewInput extends CreateRateInput {
 export class EditReviewInput extends CreateRateAndReviewInput {
   @Field()
   _id: string;
+
+  @Field()
+  productId: string
 }
 
 @InputType()

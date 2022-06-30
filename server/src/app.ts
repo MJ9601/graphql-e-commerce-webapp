@@ -42,7 +42,7 @@ const bootstrap = async () => {
       // logger.info({ accessToken, refreshToken });
 
       if (accessToken) {
-        const { decoded, expired } = verifyJwt<User>({
+        const { decoded, expired } = verifyJwt<Omit<User, "password">>({
           token: accessToken,
           isAccToken: true,
         });
@@ -61,7 +61,7 @@ const bootstrap = async () => {
           // logger.info({ newAccToken });
           if (newAccToken) {
             ctx.res.cookie("accessToken", newAccToken, accTokenOptions);
-            const { decoded } = verifyJwt<User>({
+            const { decoded } = verifyJwt<Omit<User, "password">>({
               token: newAccToken,
               isAccToken: true,
             });

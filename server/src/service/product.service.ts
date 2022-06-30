@@ -2,7 +2,7 @@ import { FilterQuery, QueryOptions, UpdateQuery } from "mongoose";
 import { Product, ProductModel } from "../schema/product.schema";
 
 export default class ProductService {
-  async createProduct(input: Omit<Product, "_id" | "productId" | "review">) {
+  async createProduct(input: Omit<Product, "_id" | "productId" | "reviews">) {
     return ProductModel.create(input);
   }
 

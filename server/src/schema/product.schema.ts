@@ -51,7 +51,7 @@ export class Product {
 
   @Field(() => [ID])
   @prop({ default: [] })
-  review: [string];
+  reviews: [string];
 
   @Field(() => String)
   @prop({ default: () => `p_${nanoid()}` })

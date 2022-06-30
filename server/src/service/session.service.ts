@@ -32,7 +32,10 @@ class SessionService {
   }
 
   async reIssueNewAccToken(token: string) {
-    const { decoded, expired } = verifyJwt<User>({ token, isAccToken: false });
+    const { decoded, expired } = verifyJwt<Omit<User, "password">>({
+      token,
+      isAccToken: false,
+    });
 
     if (!decoded || !get(decoded, "session")) return false;
 
