@@ -1,15 +1,14 @@
 import { ApolloError } from "apollo-server";
-import { omit } from "lodash";
+import { get, omit } from "lodash";
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { LoginInput, LoginObject } from "../schema/session.schema";
 import { User } from "../schema/user.schema";
 import SessionService from "../service/session.service";
 import UserService from "../service/user.service";
 import Context from "../types/context.types";
-import { signJwt } from "../utils/jwt.utils";
+import { signJwt, verifyJwt } from "../utils/jwt.utils";
 import config from "config";
 import { accTokenOptions, refTokenOptions } from "../utils/constants";
-import logger from "../utils/logger";
 
 @Resolver()
 export class SessionResolver {
@@ -57,8 +56,31 @@ export class SessionResolver {
     return { accessToken, refreshToken };
   }
 
+  @Mutation(() => LoginObject)
+  async logout(@Ctx() context: Context) {
+    const { accessToken: token } = context.req.cookies;
+    const { decoded } = verifyJwt({ token, isAccToken: true });
+
+    if (!decoded) throw new ApolloError("Invalid Token");
+
+    const deleteSession = await this.sessionService.findOneSessionAndUpdate(
+      { _id: get(decoded, "session") },
+      { valid: false },
+      { new: true }
+    );
+
+    context.res.clearCookie("accessToken");
+    context.res.clearCookie("refreshToken");
+
+    return { accessToken: "", refreshToken: "" };
+  }
+
   @Query(() => User)
-  me() {
-    return "string";
+  me(@Ctx() context: Context) {
+    const { accessToken: token } = context.req.cookies;
+    const { decoded } = verifyJwt({ token, isAccToken: true });
+    if (!decoded) throw new ApolloError("Invalid Token");
+
+    return decoded;
   }
 }
