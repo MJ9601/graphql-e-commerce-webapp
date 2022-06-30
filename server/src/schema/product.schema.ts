@@ -55,7 +55,7 @@ export class Product {
   @prop({ required: true })
   image: string;
 
-  @Field(() => [ID])
+  @Field(() => [ID], { nullable: "itemsAndList" })
   @prop({ default: [] })
   reviews: [Ref<Review>];
 
@@ -93,9 +93,27 @@ export class CreateProductInput {
 
 // use IsOptionanl() as test
 @InputType()
-export class UpdateProductInput extends CreateProductInput {
+export class UpdateProductInput {
   @Field(() => ID)
   productId: string;
+
+  @Field({ nullable: true })
+  name?: string;
+
+  @Field({ nullable: true })
+  description?: string;
+
+  @Field({ nullable: true })
+  price?: number;
+
+  @Field({ nullable: true })
+  image?: string;
+
+  @Field({ nullable: true })
+  count?: number;
+
+  @Field({ nullable: true })
+  category?: string;
 }
 
 @InputType()

@@ -7,7 +7,6 @@ import {
   Product,
   UpdateProductInput,
 } from "../schema/product.schema";
-import { LoginInput } from "../schema/session.schema";
 import CategoryService from "../service/category.service";
 import ProductService from "../service/product.service";
 import ReviewService from "../service/review.service";
@@ -17,13 +16,11 @@ import Context from "../types/context.types";
 @Resolver()
 export default class ProductResolver {
   constructor(
-    private userService: UserService,
     private reviewService: ReviewService,
     private productService: ProductService,
     private categoryService: CategoryService
   ) {
     this.productService = new ProductService();
-    this.userService = new UserService();
     this.reviewService = new ReviewService();
     this.categoryService = new CategoryService();
   }
@@ -37,10 +34,17 @@ export default class ProductResolver {
     const { Admin, _id: user } = context.user!;
     if (!Admin) throw new ApolloError("Unauthorized!");
 
-    return await this.productService.createProduct({
+    const newProduct = await this.productService.createProduct({
       user,
       ...input,
     });
+    const category = await this.categoryService.updateCat(
+      { _id: input.category },
+      { $addToSet: { products: newProduct._id } },
+      { new: true }
+    );
+
+    return newProduct;
   }
 
   @Authorized()
@@ -58,6 +62,7 @@ export default class ProductResolver {
       updated,
       { new: true }
     );
+    return updateProduct;
   }
 
   // @Authorized()

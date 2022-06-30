@@ -127,7 +127,7 @@ export default class UserResolver {
     return updateUser;
   }
 
-  // add product to bought list
+  // add product to boughtlist
   @Authorized()
   @Mutation(() => User)
   async addProductToBoughtList(

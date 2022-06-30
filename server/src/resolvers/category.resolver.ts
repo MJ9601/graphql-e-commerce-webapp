@@ -53,22 +53,26 @@ export default class CategoryResolver {
   }
   // delete one
   @Authorized()
-  @Mutation(() => Category)
+  @Mutation(() => String)
   async delCat(@Arg("input") { _id }: DelCategory, @Ctx() context: Context) {
     const { Admin } = context.user!;
     if (!Admin) throw new ApolloError("Unauthorized!");
 
-    return await this.categoryService.deleteOneCat({ _id });
+    await this.categoryService.deleteOneCat({ _id });
+
+    return "deleted";
   }
 
   // delete all
   @Authorized()
-  @Mutation(() => Category)
+  @Mutation(() => String)
   async delAllCats(@Ctx() context: Context) {
     const { Admin } = context.user!;
     if (!Admin) throw new ApolloError("Unauthorized!");
 
-    return await this.categoryService.deleteCats();
+    await this.categoryService.deleteCats();
+
+    return "deleted";
   }
 
   // get one
@@ -76,12 +80,12 @@ export default class CategoryResolver {
   async Category(@Arg("input") input: DelCategory) {
     const category = await this.categoryService.findOneCat(input);
 
-    const products = category?.products.map(
-      async (product) =>
-        await this.productService.findOneProduct({ _id: product })
-    );
+    // const products = category?.products.map(
+    //   async (product) =>
+    //     await this.productService.findOneProduct({ _id: product })
+    // );
 
-    return { ...category, products };
+    return { ...category };
   }
 
   // get all

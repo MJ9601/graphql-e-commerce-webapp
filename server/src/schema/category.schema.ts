@@ -26,7 +26,7 @@ export class Category {
   name: string;
 
   @Field(() => [ID])
-  @prop({ default: [] })
+  @prop({ default: () => [] })
   products: [Ref<Product>];
 }
 

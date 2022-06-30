@@ -101,7 +101,7 @@ export default class ReviewResolver {
   // Admin only
   // delete on review
   @Authorized()
-  @Mutation(() => Review)
+  @Mutation(() => String)
   async deleteReview(
     @Arg("input") { _id }: DelReviewInput,
     @Ctx() context: Context
@@ -109,12 +109,14 @@ export default class ReviewResolver {
     const { Admin, _id: user } = context.user!;
     if (!Admin) throw new ApolloError("Unauthorized!");
 
-    return await this.reviewService.deleteOneReview({ _id });
+    await this.reviewService.deleteOneReview({ _id });
+
+    return "Deleted";
   }
 
   // delete all review of product
   @Authorized()
-  @Mutation(() => Review)
+  @Mutation(() => String)
   async deleteReviewsOnProduct(
     @Arg("input") { productId }: DelReviewOnProductInput,
     @Ctx() context: Context
@@ -123,6 +125,7 @@ export default class ReviewResolver {
 
     if (!Admin) throw new ApolloError("Unauthorized!");
 
-    return await this.reviewService.deleteOneProductReveiws({ productId });
+    await this.reviewService.deleteOneProductReveiws({ productId });
+    return "Deleted";
   }
 }
