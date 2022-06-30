@@ -1,6 +1,6 @@
 import { ApolloError } from "apollo-server";
 import { get, omit } from "lodash";
-import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { LoginInput, LoginObject } from "../schema/session.schema";
 import { User } from "../schema/user.schema";
 import SessionService from "../service/session.service";
@@ -56,15 +56,12 @@ export class SessionResolver {
     return { accessToken, refreshToken };
   }
 
+  @Authorized()
   @Mutation(() => LoginObject)
   async logout(@Ctx() context: Context) {
-    const { accessToken: token } = context.req.cookies;
-    const { decoded } = verifyJwt({ token, isAccToken: true });
-
-    if (!decoded) throw new ApolloError("Invalid Token");
-
+    const session = get(context.user, "session");
     const deleteSession = await this.sessionService.findOneSessionAndUpdate(
-      { _id: get(decoded, "session") },
+      { _id: session },
       { valid: false },
       { new: true }
     );
@@ -75,12 +72,9 @@ export class SessionResolver {
     return { accessToken: "", refreshToken: "" };
   }
 
+  @Authorized()
   @Query(() => User)
   me(@Ctx() context: Context) {
-    const { accessToken: token } = context.req.cookies;
-    const { decoded } = verifyJwt({ token, isAccToken: true });
-    if (!decoded) throw new ApolloError("Invalid Token");
-
-    return decoded;
+    return context.user;
   }
 }

@@ -32,12 +32,20 @@ interface VerifyJwt {
   isAccToken: boolean;
 }
 
-export const verifyJwt = ({ token, isAccToken }: VerifyJwt) => {
+export const verifyJwt = <T>({
+  token,
+  isAccToken,
+}: VerifyJwt): {
+  valid: boolean;
+  expired: boolean | string;
+  decoded: T | null;
+} => {
   try {
-    const decoded = isAccToken
+    const _decoded = isAccToken
       ? jwt.verify(token, accTokenPubKey)
       : jwt.verify(token, refTokenPubKey);
 
+    const decoded = _decoded as T;
     return {
       valid: true,
       expired: false,

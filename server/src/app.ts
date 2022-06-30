@@ -12,11 +12,18 @@ import {
 import logger from "./utils/logger";
 import connectToDb from "./utils/connection.db";
 import resolvers from "./resolvers/index.resolver";
+import Context from "./types/context.types";
+import { verifyJwt } from "./utils/jwt.utils";
+import { User } from "./schema/user.schema";
+import SessionService from "./service/session.service";
+import { accTokenOptions } from "./utils/constants";
+import { get } from "lodash";
+import authChecker from "./utils/authChecker.utils";
 
 const bootstrap = async () => {
   const schema = await buildSchema({
     resolvers,
-    // authChecker
+    authChecker,
   });
 
   const app = express();
@@ -25,7 +32,44 @@ const bootstrap = async () => {
 
   const server = new ApolloServer({
     schema,
-    context: (ctx) => {
+    context: async (ctx: Context) => {
+      const {
+        req: { cookies },
+      } = ctx;
+      const accessToken = get(cookies, "accessToken");
+      const refreshToken = get(cookies, "refreshToken");
+
+      // logger.info({ accessToken, refreshToken });
+
+      if (accessToken) {
+        const { decoded, expired } = verifyJwt<User>({
+          token: accessToken,
+          isAccToken: true,
+        });
+        if (decoded) {
+          ctx.user = decoded;
+          return ctx;
+        }
+
+        // logger.info({ refreshToken });
+        if (expired && refreshToken) {
+          const sessionService = new SessionService();
+          const newAccToken = await sessionService.reIssueNewAccToken(
+            refreshToken
+          );
+
+          // logger.info({ newAccToken });
+          if (newAccToken) {
+            ctx.res.cookie("accessToken", newAccToken, accTokenOptions);
+            const { decoded } = verifyJwt<User>({
+              token: newAccToken,
+              isAccToken: true,
+            });
+            ctx.user = decoded;
+            return ctx;
+          }
+        }
+      }
       return ctx;
     },
     plugins: [
