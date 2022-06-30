@@ -9,7 +9,7 @@ import UserService from "../service/user.service";
 import logger from "../utils/logger";
 
 @Resolver()
-export class UserResolver {
+export default class UserResolver {
   constructor(private userService: UserService) {
     this.userService = new UserService();
   }

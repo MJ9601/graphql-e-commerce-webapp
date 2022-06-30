@@ -11,7 +11,7 @@ import config from "config";
 import { accTokenOptions, refTokenOptions } from "../utils/constants";
 
 @Resolver()
-export class SessionResolver {
+export default class SessionResolver {
   constructor(
     private userService: UserService,
     private sessionService: SessionService
