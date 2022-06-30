@@ -6,7 +6,7 @@ export default class ProductService {
     return ProductModel.create(input);
   }
 
-  async findProducts(query: FilterQuery<Product>) {
+  async findProducts(query: FilterQuery<Product> = {}) {
     return ProductModel.find(query).lean();
   }
 

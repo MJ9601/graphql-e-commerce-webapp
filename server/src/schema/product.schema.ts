@@ -7,7 +7,7 @@ import {
   Severity,
 } from "@typegoose/typegoose";
 import { customAlphabet } from "nanoid";
-import { Field, ID, InputType, ObjectType } from "type-graphql";
+import { Field, ID, InputType, InputType, ObjectType } from "type-graphql";
 import { User } from "./user.schema";
 
 const nanoid = customAlphabet(
@@ -47,6 +47,10 @@ export class Product {
 
   @Field(() => String)
   @prop({ required: true })
+  count: number;
+
+  @Field(() => String)
+  @prop({ required: true })
   image: string;
 
   @Field(() => [ID])
@@ -56,15 +60,16 @@ export class Product {
   @Field(() => String)
   @prop({ default: () => `p_${nanoid()}` })
   productId: string;
+
+  @Field(() => ID)
+  @prop({ ref: () => Category })
+  category: Ref<Category>;
 }
 
 export const ProductModel = getModelForClass<typeof Product>(Product);
 
 @InputType()
 export class CreateProductInput {
-  @Field(() => String)
-  productId: string;
-
   @Field(() => String)
   name: string;
 
@@ -76,10 +81,19 @@ export class CreateProductInput {
 
   @Field(() => String)
   image: string;
+
+  @Field(() => String)
+  count: number;
+
+  @Field(() => ID)
+  category: string;
 }
 
 @InputType()
-export class UpdateProductInput extends CreateProductInput {}
+export class UpdateProductInput extends CreateProductInput {
+  @Field(() => ID)
+  productId: string;
+}
 
 @InputType()
 export class UpdateProductReviews {
@@ -87,5 +101,17 @@ export class UpdateProductReviews {
   review: [string];
 
   @Field(() => String)
+  productId: string;
+}
+
+@InputType()
+export class FilterProduct {
+  @Field(() => ID)
+  category: string;
+}
+
+@InputType()
+export class GetProduct {
+  @Field(() => ID)
   productId: string;
 }

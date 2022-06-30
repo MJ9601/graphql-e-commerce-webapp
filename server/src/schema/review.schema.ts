@@ -1,6 +1,7 @@
 import { getModelForClass, prop, Ref } from "@typegoose/typegoose";
 import { IsNumber, Max, Min } from "class-validator";
 import { Field, ID, InputType, ObjectType } from "type-graphql";
+import { Product } from "./product.schema";
 import { User } from "./user.schema";
 
 @ObjectType()
@@ -11,6 +12,10 @@ export class Review {
   @Field(() => ID)
   @prop({ required: true, ref: () => User })
   user: Ref<User>;
+
+  @Field(() => ID)
+  @prop({ required: true, ref: () => Product })
+  productId: Ref<Product>;
 
   @Field(() => String)
   @prop({ required: true })
@@ -25,9 +30,8 @@ export const ReviewModel = getModelForClass<typeof Review>(Review);
 
 @InputType()
 export class CreateReviewInput {
-
   @Field()
-  productId: string
+  productId: string;
 
   @Field()
   description: string;
@@ -42,7 +46,7 @@ export class CreateRateInput {
   rate: number;
 
   @Field()
-  productId: string
+  productId: string;
 }
 
 // mo
@@ -58,11 +62,17 @@ export class EditReviewInput extends CreateRateAndReviewInput {
   _id: string;
 
   @Field()
-  productId: string
+  productId: string;
 }
 
 @InputType()
 export class DelReviewInput {
   @Field()
   _id: string;
+}
+
+@InputType()
+export class DelReviewOnProductInput {
+  @Field()
+  productId: string;
 }

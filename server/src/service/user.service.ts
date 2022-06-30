@@ -19,11 +19,11 @@ class UserService {
     return await UserModel.findOneAndUpdate(query, update, options).lean();
   }
 
-  async findOneUser({ query }: any) {
+  async findOneUser(query: FilterQuery<CreateAdminUserInput>) {
     return UserModel.findOne(query).lean();
   }
 
-  async findAllUser(query: FilterQuery<CreateAdminUserInput>) {
+  async findAllUser(query: FilterQuery<CreateAdminUserInput> = {}) {
     return UserModel.find(query);
   }
 

@@ -5,6 +5,8 @@ import {
   CreateRateAndReviewInput,
   CreateRateInput,
   CreateReviewInput,
+  DelReviewInput,
+  DelReviewOnProductInput,
   Review,
 } from "../schema/review.schema";
 import ProductService from "../service/product.service";
@@ -35,6 +37,7 @@ export default class ReviewResolver {
     const newReview = await this.reviewService.createReview({
       user,
       description,
+      productId,
     });
 
     const updateProduct = await this.productService.findOneProductAndUpdate(
@@ -56,7 +59,7 @@ export default class ReviewResolver {
 
     const newReview = await this.reviewService.findOneReviewAndUpdate(
       { user },
-      { user, rate },
+      { user, rate, productId },
       { new: true, upsert: true }
     );
 
@@ -83,6 +86,7 @@ export default class ReviewResolver {
       user,
       description,
       rate,
+      productId,
     });
 
     const updateProduct = await this.productService.findOneProductAndUpdate(
@@ -94,7 +98,31 @@ export default class ReviewResolver {
     return newReview;
   }
 
+  // Admin only
   // delete on review
+  @Authorized()
+  @Mutation(() => Review)
+  async deleteReview(
+    @Arg("input") { _id }: DelReviewInput,
+    @Ctx() context: Context
+  ) {
+    const { Admin, _id: user } = context.user!;
+    if (!Admin) throw new ApolloError("Unauthorized!");
+
+    return await this.reviewService.deleteOneReview({ _id });
+  }
 
   // delete all review of product
+  @Authorized()
+  @Mutation(() => Review)
+  async deleteReviewsOnProduct(
+    @Arg("input") { productId }: DelReviewOnProductInput,
+    @Ctx() context: Context
+  ) {
+    const { Admin, _id: user } = context.user!;
+
+    if (!Admin) throw new ApolloError("Unauthorized!");
+
+    return await this.reviewService.deleteOneProductReveiws({ productId });
+  }
 }

@@ -1,4 +1,5 @@
-import { Arg, Mutation, Query, Resolver } from "type-graphql";
+import { ApolloError } from "apollo-server";
+import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import {
   CreateAdminUserInput,
   CreateNormalUserInput,
@@ -6,6 +7,7 @@ import {
   User,
 } from "../schema/user.schema";
 import UserService from "../service/user.service";
+import Context from "../types/context.types";
 import logger from "../utils/logger";
 
 @Resolver()
@@ -57,8 +59,18 @@ export default class UserResolver {
   }
 
   // Admin only
+  @Authorized()
   @Query(() => [User])
-  allUsers() {
-    return "";
+  allUsers(@Ctx() context:Context) {
+    const {Admin, _id:user} = context.user!
+
+    if(!Admin) throw new ApolloError("UnAuthorized!")
+    const users = this.userService.findAllUser()
   }
+
+
+  // Add product to shopping list
+  //  remove a product from shopping list
+  // remove all products form shopping list
+  // add product to bought list
 }
