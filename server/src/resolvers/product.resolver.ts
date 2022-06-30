@@ -65,7 +65,7 @@ export default class ProductResolver {
   }
 
   @Query(() => [Product])
-  async filterProducts(@Arg("input") input: FilterProduct) {
+  async filterProductsBaseOnCat(@Arg("input") input: FilterProduct) {
     return this.productService.findProducts(input);
   }
 

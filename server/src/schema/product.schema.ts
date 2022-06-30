@@ -7,7 +7,9 @@ import {
   Severity,
 } from "@typegoose/typegoose";
 import { customAlphabet } from "nanoid";
-import { Field, ID, InputType, InputType, ObjectType } from "type-graphql";
+import { Field, ID, InputType, ObjectType } from "type-graphql";
+import { Category } from "./category.schema";
+import { Review } from "./review.schema";
 import { User } from "./user.schema";
 
 const nanoid = customAlphabet(
@@ -55,7 +57,7 @@ export class Product {
 
   @Field(() => [ID])
   @prop({ default: [] })
-  reviews: [string];
+  reviews: [Ref<Review>];
 
   @Field(() => String)
   @prop({ default: () => `p_${nanoid()}` })
