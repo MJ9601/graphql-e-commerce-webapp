@@ -46,3 +46,12 @@ export class DelCategory {
 
 @InputType()
 export class FindCategory extends CreateCategory {}
+
+@InputType()
+export class AddProductToCat {
+  @Field(() => ID)
+  _id: string;
+
+  @Field(() => [ID])
+  products: string;
+}

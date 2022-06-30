@@ -18,7 +18,7 @@ export default class CategoryService {
     return CategoryModel.findOne(query).lean();
   }
 
-  async findCats(query: FilterQuery<Category>) {
+  async findCats(query: FilterQuery<Category> = {}) {
     return CategoryModel.find(query).lean();
   }
 

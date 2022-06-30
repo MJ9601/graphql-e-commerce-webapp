@@ -91,6 +91,7 @@ export class CreateProductInput {
   category: string;
 }
 
+// use IsOptionanl() as test
 @InputType()
 export class UpdateProductInput extends CreateProductInput {
   @Field(() => ID)
