@@ -5,11 +5,13 @@ import {
   modelOptions,
   Severity,
   DocumentType,
+  Ref,
 } from "@typegoose/typegoose";
 import { IsEmail, MaxLength, MinLength } from "class-validator";
 import { Field, ID, InputType, ObjectType } from "type-graphql";
 import argon2 from "argon2";
 import logger from "../utils/logger";
+import { Product } from "./product.schema";
 
 @modelOptions({
   schemaOptions: {
@@ -45,12 +47,12 @@ export class User {
   Admin: boolean;
 
   @Field(() => [ID])
-  @prop({ default: [] })
-  shoppingCard: [string];
+  @prop({ default: () => [] })
+  shoppingCard: [Ref<Product>];
 
   @Field(() => [ID])
-  @prop({ default: [] })
-  boughtProduct: [string];
+  @prop({ default: () => [] })
+  boughtProduct: [Ref<Product>];
 
   async validatePassword(this: DocumentType<User>, passwordOnReq: string) {
     try {
@@ -93,3 +95,8 @@ export class UpdateUserPasswordInput extends CreateNormalUserInput {
   newPassword: string;
 }
 
+@InputType()
+export class AddProductToUser {
+  @Field(() => ID)
+  product: string;
+}

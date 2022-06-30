@@ -8,6 +8,7 @@ import {
   UpdateProductInput,
 } from "../schema/product.schema";
 import { LoginInput } from "../schema/session.schema";
+import CategoryService from "../service/category.service";
 import ProductService from "../service/product.service";
 import ReviewService from "../service/review.service";
 import UserService from "../service/user.service";
@@ -18,11 +19,13 @@ export default class ProductResolver {
   constructor(
     private userService: UserService,
     private reviewService: ReviewService,
-    private productService: ProductService
+    private productService: ProductService,
+    private categoryService: CategoryService
   ) {
     this.productService = new ProductService();
     this.userService = new UserService();
     this.reviewService = new ReviewService();
+    this.categoryService = new CategoryService();
   }
 
   @Authorized()
@@ -71,6 +74,17 @@ export default class ProductResolver {
 
   @Query(() => Product)
   async product(@Arg("input") input: GetProduct) {
-    return this.productService.findOneProduct(input);
+    const product = await this.productService.findOneProduct(input);
+
+    if (!product) throw new ApolloError("NotFound!");
+
+    const reviews = product?.reviews.map(
+      async (review) => await this.reviewService.findOneReview({ _id: review })
+    );
+    const category = await this.categoryService.findOneCat({
+      _id: product?.category,
+    });
+
+    return { ...product, reviews, category };
   }
 }
