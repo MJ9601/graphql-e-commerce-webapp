@@ -1,10 +1,13 @@
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 import React, { useState } from "react";
+import DashboardNav from "./Dashboard.Nav";
+import HomeNav from "./Home.Nav";
 
 const Navbar = () => {
   const [showNav, setShowNav] = useState(true);
+  const user = true;
   return (
-    <div className="relative z-[100]">
+    <div className="relative z-[100] md:z-0">
       <div
         className={`${
           showNav ? "left-[0]" : "left-[-245px]"
@@ -21,14 +24,7 @@ const Navbar = () => {
           )}
         </div>
 
-        <div className="pt-6">
-          <h2 className="text-lg font-semibold px-2">Categories: </h2>
-          <div className="pt-3">
-            <h5 className="catButton">sport</h5>
-            <h5 className="catButton">sport</h5>
-            <h5 className="catButton">sport</h5>
-          </div>
-        </div>
+        {!user ? <HomeNav /> : <DashboardNav />}
       </div>
     </div>
   );

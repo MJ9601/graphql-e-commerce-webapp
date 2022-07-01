@@ -25,7 +25,9 @@ const PageLayout = ({
       <Header />
       <div className="flex items-start justify-between  min-h-[100vh] container mx-auto">
         <Navbar />
-        <div {...props}>{children}</div>
+        <div {...props} className="flex-1">
+          {children}
+        </div>
         <Sidebar />
       </div>
       <Footer />

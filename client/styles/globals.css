@@ -6,4 +6,16 @@
   .catButton {
     @apply text-lg pt-1 pb-3 overflow-hidden w-[50%] min-w-[200px] text-gray-500 font-semibold pl-4 cursor-pointer hover:text-black  relative before:border-b-2 before:border-black before:w-full before:absolute before:bottom-2 before:-left-full hover:before:left-0 before:transition-all before:duration-300;
   }
+  .customButton {
+    @apply mr-3 bg-green-500 py-1 px-12 rounded-md font-bold text-white tracking-wide ring-1 ring-green-500 hover:bg-green-300 hover:text-green-800 transition-all duration-500;
+  }
+  .label {
+    @apply w-[100%] text-lg flex flex-col gap-2;
+  }
+  .input {
+    @apply outline-none rounded-sm py-1 px-3 ring-1 ring-gray-200 w-[100%];
+  }
+  .submitButton {
+    @apply w-[100%] font-[500] text-lg bg-blue-600 py-1 rounded-sm text-white cursor-pointer hover:tracking-wider  transition-all duration-300 mt-3;
+  }
 }
