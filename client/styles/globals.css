@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .catButton {
+    @apply text-lg pt-1 pb-3 overflow-hidden w-[50%] min-w-[200px] text-gray-500 font-semibold pl-4 cursor-pointer hover:text-black  relative before:border-b-2 before:border-black before:w-full before:absolute before:bottom-2 before:-left-full hover:before:left-0 before:transition-all before:duration-300;
+  }
+}
