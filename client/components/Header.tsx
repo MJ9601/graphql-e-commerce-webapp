@@ -1,5 +1,5 @@
+import { Login } from "@mui/icons-material";
 import React from "react";
-import { LoginIcon } from "@heroicons/react/outline";
 
 const Header = () => {
   return (
@@ -17,7 +17,9 @@ const Header = () => {
           <h3 className="catButton min-w-[90px] hidden md:block font-serif py-5 -mb-3">
             Login
           </h3>
-          <LoginIcon className="h-6 md:hidden pr-2 cursor-pointer" />
+          <h2 className="md:hidden">
+            <Login className="text-2xl text-black mr-4 cursor-pointer" />
+          </h2>
         </div>
       </div>
     </div>

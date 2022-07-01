@@ -1,18 +1,25 @@
+import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 import React, { useState } from "react";
 
 const Navbar = () => {
   const [showNav, setShowNav] = useState(true);
   return (
-    <div className="relative">
+    <div className="relative z-[100]">
       <div
         className={`${
           showNav ? "left-[0]" : "left-[-245px]"
-        } bg-green-200 min-h-[100vh] absolute w-[250px] transition-all duration-300 md:left-0 md:min-w-[250px] md:bg-white`}
+        } bg-green-200 min-h-[100vh] fixed md:relative w-[250px] md:w-max transition-all duration-300 md:left-0 md:min-w-[250px] md:bg-white`}
       >
         <div
           className="absolute w-[50px] h-[50px] rounded-full top-[45%] right-[-20px] bg-green-200 cursor-pointer md:hidden"
           onClick={() => setShowNav(!showNav)}
-        ></div>
+        >
+          {!showNav ? (
+            <ArrowForwardIos className="text-black h-6 absolute top-3 left-7 animate-bounceX" />
+          ) : (
+            <ArrowBackIos className="text-black h-6 absolute top-3 left-7 animate-bounceX" />
+          )}
+        </div>
 
         <div className="pt-6">
           <h2 className="text-lg font-semibold px-2">Categories: </h2>
