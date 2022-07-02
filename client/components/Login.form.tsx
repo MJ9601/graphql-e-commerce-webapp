@@ -1,9 +1,17 @@
 import React from "react";
 
-const Loginform = ({ AdminLogin }: { AdminLogin: boolean }) => {
+const Loginform = ({
+  AdminLogin,
+  signUp,
+}: {
+  AdminLogin: boolean;
+  signUp: boolean;
+}) => {
   return (
     <div className="rounded-lg bg-white ring-1 ring-gray-200 py-4 px-4 min-w-[300px]">
-      <h3 className="text-lg font-semibold text-center font-serif">Login</h3>
+      <h3 className="text-lg font-semibold text-center font-serif">
+        {signUp ? "Sign Up" : "Login"}{" "}
+      </h3>
       <form action="" className="py-2 w-[100%] mt-4">
         <label htmlFor="" className="label">
           Email:
@@ -13,11 +21,7 @@ const Loginform = ({ AdminLogin }: { AdminLogin: boolean }) => {
           Password:
           <input type="password" name="" id="" className="input" />
         </label>
-        <input
-          type="submit"
-          value="Submit"
-          className="submitButton"
-        />
+        <input type="submit" value="Submit" className="submitButton" />
       </form>
     </div>
   );
