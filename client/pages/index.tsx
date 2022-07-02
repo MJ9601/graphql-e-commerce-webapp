@@ -8,8 +8,8 @@ const Home = () => {
   return (
     <div className="text-red-900 font-bold w-fit py-5">
       <div className="flex justify-center flex-wrap items-start gap-3">
-        <ProductCard product={""} />
-        <ProductCard product={""} />
+        <ProductCard product={""} AdminAccess={false} />
+        <ProductCard product={""} AdminAccess={false} />
       </div>
     </div>
   );

@@ -9,6 +9,9 @@
   .customButton {
     @apply mr-3 bg-green-500 py-1 px-12 rounded-md font-bold text-white tracking-wide ring-1 ring-green-500 hover:bg-green-300 hover:text-green-800 transition-all duration-500;
   }
+  .customDelButton {
+    @apply mr-3 bg-red-500 py-1 px-2 rounded-md font-bold text-white tracking-wide ring-1 ring-red-500 hover:bg-red-300 hover:text-red-800 transition-all duration-500;
+  }
   .label {
     @apply w-[100%] text-lg flex flex-col gap-2;
   }
