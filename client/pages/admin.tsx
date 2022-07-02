@@ -1,6 +1,8 @@
 import React, { ReactElement } from "react";
+import Categorymodal from "../components/Category.modal";
 import PageLayout from "../components/layout/PageLayout";
 import ProductCard from "../components/Product.Card";
+import Productmodal from "../components/Product.modal";
 import UpdatePasswordfrom from "../components/UpdatePassword.from";
 
 const Admin = () => {
@@ -14,6 +16,8 @@ const Admin = () => {
         </div>
       </div>
       <UpdatePasswordfrom Admin={true} />
+      <Productmodal />
+      <Categorymodal />
     </div>
   );
 };
