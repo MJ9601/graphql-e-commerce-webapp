@@ -2,6 +2,7 @@ import { FilterQuery, QueryOptions, UpdateQuery } from "mongoose";
 import { CategoryModel } from "../schema/category.schema";
 import { Product, ProductModel } from "../schema/product.schema";
 import { ReviewModel } from "../schema/review.schema";
+import { UserModel } from "../schema/user.schema";
 
 export default class ProductService {
   async createProduct(input: Omit<Product, "_id" | "productId" | "reviews">) {
@@ -10,7 +11,11 @@ export default class ProductService {
         path: "category",
         model: CategoryModel,
       },
-      { path: "reviews", model: ReviewModel },
+      {
+        path: "reviews",
+        model: ReviewModel,
+        populate: { path: "user", model: UserModel },
+      },
     ]);
   }
 
@@ -21,7 +26,11 @@ export default class ProductService {
           path: "category",
           model: CategoryModel,
         },
-        { path: "reviews", model: ReviewModel },
+        {
+          path: "reviews",
+          model: ReviewModel,
+          populate: { path: "user", model: UserModel },
+        },
       ])
       .lean();
   }
@@ -33,7 +42,11 @@ export default class ProductService {
           path: "category",
           model: CategoryModel,
         },
-        { path: "reviews", model: ReviewModel },
+        {
+          path: "reviews",
+          model: ReviewModel,
+          populate: { path: "user", model: UserModel },
+        },
       ])
       .lean();
   }
@@ -49,7 +62,11 @@ export default class ProductService {
           path: "category",
           model: CategoryModel,
         },
-        { path: "reviews", model: ReviewModel },
+        {
+          path: "reviews",
+          model: ReviewModel,
+          populate: { path: "user", model: UserModel },
+        },
       ])
       .lean();
   }

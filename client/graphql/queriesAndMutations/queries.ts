@@ -7,7 +7,12 @@ export const CATEGORY = gql`
     Category(input:$input) {
       _id,
       name,
-      products
+      products{
+        _id,
+        name,
+        price,
+        count,
+      }
     }
   }
 `;
@@ -17,7 +22,9 @@ export const ALL_CATEGORIES = gql`
     allCategories {
       _id
       name
-      products
+      products {
+        _id
+      }
     }
   }
 `;
@@ -44,7 +51,10 @@ export const FILTER_PRODUCTS_BASE_ON_CAT = gql`
       price
       count
       image
-      category
+      category{
+        _id, 
+        name
+      }
     }
   }`;
 
@@ -58,8 +68,16 @@ export const PRODUCT = gql`
       price
       count
       image
-      category
-      reviews
+      category{
+        _id,
+        name,
+      }
+      reviews{
+        _id,
+        description,
+        rate,
+        createdAt,
+      }
     }
   }`;
 
@@ -69,8 +87,28 @@ export const ME = gql`
       _id
       email
       Admin
-      shoppingCard
-      boughtProduct
+      shoppingCard {
+        _id
+      }
+      boughtProduct {
+        _id
+      }
+    }
+  }
+`;
+
+export const USER = gql`
+  query user {
+    User {
+      _id
+      email
+      Admin
+      shoppingCard {
+        _id
+      }
+      boughtProduct {
+        _id
+      }
     }
   }
 `;
@@ -81,8 +119,12 @@ export const ALL_USERS = gql`
       _id
       email
       Admin
-      shoppingCard
-      boughtProduct
+      shoppingCard {
+        _id
+      }
+      boughtProduct {
+        _id
+      }
     }
   }
 `;

@@ -15,7 +15,7 @@ export class Review {
   @Field(() => Date)
   readonly updatedAt: Date;
 
-  @Field(() => ID)
+  @Field(() => User)
   @prop({ required: true, ref: User })
   user: Ref<User>;
 
