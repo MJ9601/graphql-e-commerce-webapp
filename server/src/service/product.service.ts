@@ -1,17 +1,41 @@
 import { FilterQuery, QueryOptions, UpdateQuery } from "mongoose";
+import { CategoryModel } from "../schema/category.schema";
 import { Product, ProductModel } from "../schema/product.schema";
+import { ReviewModel } from "../schema/review.schema";
 
 export default class ProductService {
   async createProduct(input: Omit<Product, "_id" | "productId" | "reviews">) {
-    return ProductModel.create(input);
+    return (await ProductModel.create(input)).populate([
+      {
+        path: "category",
+        model: CategoryModel,
+      },
+      { path: "reviews", model: ReviewModel },
+    ]);
   }
 
   async findProducts(query: FilterQuery<Product> = {}) {
-    return ProductModel.find(query).lean();
+    return ProductModel.find(query)
+      .populate([
+        {
+          path: "category",
+          model: CategoryModel,
+        },
+        { path: "reviews", model: ReviewModel },
+      ])
+      .lean();
   }
 
   async findOneProduct(query: FilterQuery<Product>) {
-    return ProductModel.findOne(query).lean();
+    return ProductModel.findOne(query)
+      .populate([
+        {
+          path: "category",
+          model: CategoryModel,
+        },
+        { path: "reviews", model: ReviewModel },
+      ])
+      .lean();
   }
 
   async findOneProductAndUpdate(
@@ -19,7 +43,15 @@ export default class ProductService {
     update: UpdateQuery<Product>,
     options: QueryOptions = {}
   ) {
-    return ProductModel.findOneAndUpdate(query, update, options).lean();
+    return ProductModel.findOneAndUpdate(query, update, options)
+      .populate([
+        {
+          path: "category",
+          model: CategoryModel,
+        },
+        { path: "reviews", model: ReviewModel },
+      ])
+      .lean();
   }
 
   async deleteOneProduct(query: FilterQuery<Product>) {

@@ -69,12 +69,16 @@ export default class ProductResolver {
 
   @Query(() => [Product])
   async allProducts() {
-    return this.productService.findProducts();
+    const allProducts = await this.productService.findProducts();
+    console.log(allProducts);
+    return allProducts;
   }
 
   @Query(() => [Product])
   async filterProductsBaseOnCat(@Arg("input") input: FilterProduct) {
-    return this.productService.findProducts(input);
+    const product = await this.productService.findProducts(input);
+    console.log(product);
+    return product;
   }
 
   @Query(() => Product)
@@ -83,13 +87,15 @@ export default class ProductResolver {
 
     if (!product) throw new ApolloError("NotFound!");
 
-    const reviews = product?.reviews.map(
-      async (review) => await this.reviewService.findOneReview({ _id: review })
-    );
-    const category = await this.categoryService.findOneCat({
-      _id: product?.category,
-    });
+    // const reviews = product?.reviews.map(
+    //   async (review) => await this.reviewService.findOneReview({ _id: review })
+    // );
+    // const category = await this.categoryService.findOneCat({
+    //   _id: product?.category,
+    // });
 
-    return { ...product, reviews, category };
+    console.log(product);
+
+    return { ...product };
   }
 }

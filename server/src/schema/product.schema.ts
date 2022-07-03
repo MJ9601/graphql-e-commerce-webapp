@@ -55,16 +55,16 @@ export class Product {
   @prop({ required: true })
   image: string;
 
-  @Field(() => [ID], { nullable: "itemsAndList" })
-  @prop({ default: [] })
+  @Field(() => [Review], { nullable: "items" })
+  @prop()
   reviews: [Ref<Review>];
 
   @Field(() => String)
   @prop({ default: () => `p_${nanoid()}` })
   productId: string;
 
-  @Field(() => ID)
-  @prop({ ref: () => Category })
+  @Field(() => Category, { nullable: true })
+  @prop()
   category: Ref<Category>;
 }
 
@@ -135,4 +135,10 @@ export class FilterProduct {
 export class GetProduct {
   @Field(() => ID)
   productId: string;
+}
+
+@ObjectType()
+export class ProductOnCard extends Product {
+  @Field(() => Number)
+  amount: number;
 }

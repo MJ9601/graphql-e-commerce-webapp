@@ -9,12 +9,18 @@ export class Review {
   @Field(() => ID)
   _id: string;
 
-  @Field(() => ID)
-  @prop({ required: true, ref: () => User })
-  user: Ref<User>;
+  @Field(() => Date)
+  readonly createdAt: Date;
+
+  @Field(() => Date)
+  readonly updatedAt: Date;
 
   @Field(() => ID)
-  @prop({ required: true, ref: () => Product })
+  @prop({ required: true, ref: User })
+  user: Ref<User>;
+
+  @Field(() => String)
+  @prop({ required: true })
   productId: Ref<Product>;
 
   @Field(() => String)

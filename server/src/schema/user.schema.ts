@@ -11,7 +11,7 @@ import { IsEmail, MaxLength, MinLength } from "class-validator";
 import { Field, ID, InputType, ObjectType } from "type-graphql";
 import argon2 from "argon2";
 import logger from "../utils/logger";
-import { Product } from "./product.schema";
+import { Product, ProductOnCard } from "./product.schema";
 
 @modelOptions({
   schemaOptions: {
@@ -46,11 +46,11 @@ export class User {
   @prop({ default: false })
   Admin: boolean;
 
-  @Field(() => [ID])
+  @Field(() => [Product], { nullable: "items" })
   @prop({ default: () => [] })
   shoppingCard: [Ref<Product>];
 
-  @Field(() => [ID])
+  @Field(() => [Product])
   @prop({ default: () => [] })
   boughtProduct: [Ref<Product>];
 

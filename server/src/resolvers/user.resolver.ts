@@ -164,11 +164,11 @@ export default class UserResolver {
 
     if (!user) throw new ApolloError("Invalid User Info");
 
-    const shoppingCard = user.shoppingCard.map(
-      async (product) =>
-        await this.productService.findOneProduct({ _id: product })
-    );
-
-    return { ...user, shoppingCard };
+    // const shoppingCard = user.shoppingCard.map(
+    //   async (product) =>
+    //     await this.productService.findOneProduct({ _id: product })
+    // );
+    console.log(user);
+    return { ...user };
   }
 }

@@ -1,13 +1,13 @@
 import {
   getModelForClass,
   ModelOptions,
+  plugin,
   prop,
   Ref,
   Severity,
 } from "@typegoose/typegoose";
 import { Field, ID, InputType, ObjectType } from "type-graphql";
 import { Product } from "./product.schema";
-
 @ModelOptions({
   schemaOptions: {
     timestamps: true,
@@ -19,13 +19,13 @@ import { Product } from "./product.schema";
 @ObjectType()
 export class Category {
   @Field(() => ID)
-  _id: string;
+  readonly _id: string;
 
   @Field(() => String)
   @prop({ required: true })
   name: string;
 
-  @Field(() => [ID])
+  @Field(() => [Product])
   @prop({ default: () => [] })
   products: [Ref<Product>];
 }
