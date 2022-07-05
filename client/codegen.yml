@@ -1,0 +1,25 @@
+overwrite: true
+schema: "http://localhost:8080/graphql"
+require:
+  - ts-node/register
+documents: graphql/documents/schemas/*.graphql
+
+generates:
+  graphql/generated/index.tsx:
+    config:
+      reactApolloVersion: 3.6.9
+      withHooks: true
+
+    plugins:
+      - add:
+          content: "// THIS IS A GENERATED FILE, use `npm run codegen` to generate"
+      - add:
+          content: "/* tslint:disable */"
+
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"
+
+  graphql/graphql.schema.json:
+    plugins:
+      - "introspection"

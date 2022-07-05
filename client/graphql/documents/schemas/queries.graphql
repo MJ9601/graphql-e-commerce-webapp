@@ -1,0 +1,10 @@
+query allProducts {
+  allProducts {
+    _id
+    productId
+    name
+    price
+    count
+    image
+  }
+}
