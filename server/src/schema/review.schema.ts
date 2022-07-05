@@ -1,9 +1,18 @@
-import { getModelForClass, prop, Ref } from "@typegoose/typegoose";
+import {
+  getModelForClass,
+  ModelOptions,
+  prop,
+  Ref,
+} from "@typegoose/typegoose";
 import { IsNumber, Max, Min } from "class-validator";
 import { Field, ID, InputType, ObjectType } from "type-graphql";
 import { Product } from "./product.schema";
 import { User } from "./user.schema";
-
+@ModelOptions({
+  schemaOptions: {
+    timestamps: true,
+  },
+})
 @ObjectType()
 export class Review {
   @Field(() => ID)
