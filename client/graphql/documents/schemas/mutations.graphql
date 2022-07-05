@@ -1,0 +1,235 @@
+mutation createCat($input: CreateCategory!) {
+  createCat(input: $input) {
+    _id
+    name
+    products {
+      _id
+    }
+  }
+}
+
+mutation addProductToCat($input: AddProductToCat!) {
+  addProductToCat(input: $input) {
+    _id
+    name
+    products {
+      _id
+      name
+      price
+      count
+    }
+  }
+}
+
+mutation delCat($input: DelCategory!) {
+  delCat(input: $input)
+}
+
+mutation delAllCats {
+  delAllCats
+}
+
+mutation createProduct($input: CreateProductInput!) {
+  createProduct(input: $input) {
+    _id
+    productId
+    name
+    description
+    price
+    image
+    category {
+      _id
+      name
+    }
+    reviews {
+      _id
+    }
+  }
+}
+
+mutation updateProductDetails($input: UpdateProductInput!) {
+  updateProductDetails(input: $input) {
+    _id
+    productId
+    name
+    description
+    price
+    image
+    category {
+      _id
+      name
+    }
+    reviews {
+      _id
+    }
+  }
+}
+
+mutation createReview($input: CreateReviewInput!) {
+  createReview(input: $input) {
+    _id
+    description
+    rate
+  }
+}
+
+mutation createRating($input: CreateRateInput!) {
+  createRating(input: $input) {
+    _id
+    description
+    rate
+  }
+}
+
+mutation createReviewAndRating($input: CreateRateAndReviewInput!) {
+  createReviewAndRating(input: $input) {
+    _id
+    description
+    rate
+  }
+}
+
+mutation deleteReview($input: DelReviewInput!) {
+  deleteReview(input: $input)
+}
+
+mutation deleteReviewsOnProduct($input: DelReviewOnProductInput!) {
+  deleteReviewsOnProduct(input: $input)
+}
+
+mutation login($input: LoginInput!) {
+  login(input: $input) {
+    accessToken
+    refreshToken
+  }
+}
+
+mutation logout {
+  logout {
+    accessToken
+    refreshToken
+  }
+}
+
+mutation createNormalUser($input: CreateNormalUserInput!) {
+  createNormalUser(input: $input) {
+    _id
+    email
+    Admin
+  }
+}
+
+mutation createAdmimUser($input: CreateAdminUserInput!) {
+  createAdmimUser(input: $input) {
+    _id
+    email
+    Admin
+  }
+}
+
+mutation updateUserPassword($input: UpdateUserPasswordInput!) {
+  updateUserPassword(input: $input) {
+    _id
+    email
+  }
+}
+
+mutation addProductToShoppingList($input: AddProductToUser!) {
+  addProductToShoppingList(input: $input) {
+    _id
+    email
+    shoppingCard {
+      _id
+      productId
+      name
+      price
+      image
+    }
+    boughtProduct {
+      _id
+      name
+      price
+      image
+    }
+  }
+}
+
+mutation removeProductFromShoppingList($input: AddProductToUser!) {
+  removeProductFromShoppingList(input: $input) {
+    _id
+    email
+    shoppingCard {
+      _id
+      productId
+      name
+      price
+      image
+    }
+    boughtProduct {
+      _id
+      name
+      price
+      image
+    }
+  }
+}
+
+mutation removeAllProductFromShoppingList {
+  removeAllProductFromShoppingList {
+    _id
+    email
+    shoppingCard {
+      _id
+      productId
+      name
+      price
+      image
+    }
+    boughtProduct {
+      _id
+      name
+      price
+      image
+    }
+  }
+}
+
+mutation addProductToBoughtList($input: AddProductToUser!) {
+  addProductToBoughtList(input: $input) {
+    _id
+    email
+    shoppingCard {
+      _id
+      productId
+      name
+      price
+      image
+    }
+    boughtProduct {
+      _id
+      name
+      price
+      image
+    }
+  }
+}
+
+mutation User {
+  User {
+    _id
+    email
+    shoppingCard {
+      _id
+      productId
+      name
+      price
+      image
+    }
+    boughtProduct {
+      _id
+      name
+      price
+      image
+    }
+  }
+}

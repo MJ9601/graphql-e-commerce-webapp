@@ -10,6 +10,10 @@ generates:
       reactApolloVersion: 3.6.9
       withHooks: true
 
+      hooks:
+        afterAllFileWrite:
+          - prettier --write
+
     plugins:
       - add:
           content: "// THIS IS A GENERATED FILE, use `npm run codegen` to generate"

@@ -1,3 +1,67 @@
+query product($input: GetProduct!) {
+  product(input: $input) {
+    _id
+    productId
+    name
+    description
+    price
+    count
+    image
+    category {
+      _id
+      name
+    }
+    reviews {
+      _id
+      description
+      rate
+      createdAt
+    }
+  }
+}
+
+query me {
+  me {
+    _id
+    email
+    Admin
+    shoppingCard {
+      _id
+    }
+    boughtProduct {
+      _id
+    }
+  }
+}
+
+query filterProductsBaseOnCat($input: FilterProduct!) {
+  filterProductsBaseOnCat(input: $input) {
+    _id
+    productId
+    name
+    price
+    count
+    image
+    category {
+      _id
+      name
+    }
+  }
+}
+
+query allCategories {
+  allCategories {
+    _id
+    name
+    products {
+      _id
+      name
+      price
+      count
+    }
+  }
+}
+
 query allProducts {
   allProducts {
     _id
@@ -6,5 +70,51 @@ query allProducts {
     price
     count
     image
+    category {
+      _id
+      name
+    }
+  }
+}
+
+query allUsers {
+  allUsers {
+    _id
+    email
+    Admin
+    shoppingCard {
+      _id
+    }
+    boughtProduct {
+      _id
+    }
+  }
+}
+
+query Category($input: DelCategory!) {
+  Category(input: $input) {
+    _id
+    name
+    products {
+      _id
+      name
+      price
+      count
+    }
+  }
+}
+
+query filterProductsBaseOnCat($input: FilterProduct!) {
+  filterProductsBaseOnCat(input: $input) {
+    _id
+    productId
+    name
+    price
+    count
+    image
+    category {
+      _id
+      name
+    }
   }
 }
