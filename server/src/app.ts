@@ -19,6 +19,7 @@ import SessionService from "./service/session.service";
 import { accTokenOptions } from "./utils/constants";
 import { get } from "lodash";
 import authChecker from "./utils/authChecker.utils";
+import cors from "cors";
 
 const bootstrap = async () => {
   const schema = await buildSchema({
@@ -27,7 +28,23 @@ const bootstrap = async () => {
   });
 
   const app = express();
+  // app.use(
+  //   cors({
+  //     origin: "http://localhost:3000",
+  //     credentials: true,
+  //   })
+  // );
 
+  // app.use(function (_, res, next) {
+  //   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  //   res.setHeader("Access-Control-Allow-Credentials", "true");
+  //   next();
+  // });
+
+  const corsOptions = {
+    origin: "http://localhost:3000",
+    credentials: true,
+  };
   app.use(cookieParser());
 
   const server = new ApolloServer({
@@ -41,18 +58,19 @@ const bootstrap = async () => {
 
       // logger.info({ accessToken, refreshToken });
 
-      if (accessToken) {
-        const { decoded, expired } = verifyJwt<Omit<User, "password">>({
-          token: accessToken,
-          isAccToken: true,
-        });
-        if (decoded) {
-          ctx.user = decoded;
-          return ctx;
+      if (accessToken || (!accessToken && refreshToken)) {
+        if (accessToken) {
+          const { decoded, expired } = verifyJwt<Omit<User, "password">>({
+            token: accessToken,
+            isAccToken: true,
+          });
+          if (decoded) {
+            ctx.user = decoded;
+            return ctx;
+          }
         }
-
         // logger.info({ refreshToken });
-        if (expired && refreshToken) {
+        if (!accessToken && refreshToken) {
           const sessionService = new SessionService();
           const newAccToken = await sessionService.reIssueNewAccToken(
             refreshToken
@@ -81,7 +99,7 @@ const bootstrap = async () => {
 
   await server.start();
 
-  server.applyMiddleware({ app });
+  server.applyMiddleware({ app, cors: corsOptions });
 
   const port = config.get<number>("port");
 

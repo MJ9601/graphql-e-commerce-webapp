@@ -8,13 +8,16 @@ import nextWithApollo from "next-with-apollo";
 import { useRouter } from "next/router";
 
 const withApollo = nextWithApollo(
-  ({ initialState, headers }) => {
+  ({ ctx, initialState, headers }) => {
+    console.log(ctx?.req?.headers.cookie);
     return new ApolloClient({
       link: new HttpLink({
         uri: `${process.env.NEXT_PUBLIC_SERVER_ENDPOINT as string}`,
+        credentials: "include",
       }),
       headers: {
         ...(headers as Record<string, string>),
+        cookie: ctx?.req?.headers.cookie as string,
       },
       cache: new InMemoryCache().restore(initialState || {}),
     });

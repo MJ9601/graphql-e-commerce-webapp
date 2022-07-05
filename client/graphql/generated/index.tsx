@@ -440,7 +440,7 @@ export type ProductQuery = { __typename?: 'Query', product: { __typename?: 'Prod
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', _id: string, email: string, Admin: boolean, shoppingCard: Array<{ __typename?: 'Product', _id: string } | null>, boughtProduct: Array<{ __typename?: 'Product', _id: string }> } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', _id: string, email: string, Admin: boolean } };
 
 export type FilterProductsBaseOnCatQueryVariables = Exact<{
   input: FilterProduct;
@@ -1328,12 +1328,6 @@ export const MeDocument = gql`
     _id
     email
     Admin
-    shoppingCard {
-      _id
-    }
-    boughtProduct {
-      _id
-    }
   }
 }
     `;

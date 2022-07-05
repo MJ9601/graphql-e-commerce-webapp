@@ -1,8 +1,13 @@
 import { Login, Logout } from "@mui/icons-material";
 import React from "react";
+import { useMeQuery } from "../graphql/generated";
 
 const Header = () => {
-  const user = true;
+  const { data, loading, error, networkStatus } = useMeQuery({
+    notifyOnNetworkStatusChange: true,
+  });
+
+  const user = data?.me;
   return (
     <div className="z-[100] bg-green-200 sticky top-0">
       <div className="flex container mx-auto justify-between items-center py-1">

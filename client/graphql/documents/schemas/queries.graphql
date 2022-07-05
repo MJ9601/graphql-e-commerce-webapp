@@ -25,12 +25,6 @@ query me {
     _id
     email
     Admin
-    shoppingCard {
-      _id
-    }
-    boughtProduct {
-      _id
-    }
   }
 }
 
