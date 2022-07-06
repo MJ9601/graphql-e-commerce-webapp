@@ -15,7 +15,7 @@ const Adminlogin = () => {
   console.log({ data, error, networkStatus });
   useEffect(() => {
     if (data?.me.Admin) router.push("/admin");
-  }, []);
+  }, [data]);
 
   return (
     <div className="grid w-[100vw] h-[100vh] place-items-center">

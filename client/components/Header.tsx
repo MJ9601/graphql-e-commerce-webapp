@@ -1,11 +1,18 @@
 import { Login, Logout } from "@mui/icons-material";
+import { useRouter } from "next/router";
 import React from "react";
-import { useMeQuery } from "../graphql/generated";
+import { useLogoutMutation, useMeQuery } from "../graphql/generated";
 
 const Header = () => {
   const { data, loading, error, networkStatus } = useMeQuery({
     notifyOnNetworkStatusChange: true,
   });
+
+  const router = useRouter();
+
+  const [logout, { data: logoutData }] = useLogoutMutation();
+
+  console.log(logoutData?.logout.accessToken);
 
   const user = data?.me;
   return (
@@ -22,11 +29,17 @@ const Header = () => {
         <div className="flex justify-end gap-2 mr-2">
           {!user ? (
             <>
-              <h3 className="catButton min-w-[90px] hidden md:block font-serif py-5 -mb-3">
+              <h3
+                className="catButton min-w-[90px] hidden md:block font-serif py-5 -mb-3"
+                onClick={() => router.push("/auth/login")}
+              >
                 Login
               </h3>
               <h2 className="md:hidden">
-                <Login className="text-2xl text-black mr-4 cursor-pointer" />
+                <Login
+                  className="text-2xl text-black mr-4 cursor-pointer"
+                  onClick={() => router.push("/auth/login")}
+                />
               </h2>
             </>
           ) : (
@@ -35,7 +48,10 @@ const Header = () => {
                 Sign out
               </h3>
               <h2 className="md:hidden">
-                <Logout className="text-2xl text-black mr-4 cursor-pointer" />
+                <Logout
+                  className="text-2xl text-black mr-4 cursor-pointer"
+                  onClick={() => logout()}
+                />
               </h2>
             </>
           )}

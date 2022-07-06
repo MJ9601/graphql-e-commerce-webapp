@@ -233,3 +233,11 @@ mutation User {
     }
   }
 }
+
+mutation deleteAllProducts {
+  deleteAllProducts
+}
+
+mutation deleteOneProduct($input: GetProduct!) {
+  deleteOneProduct(input: $input)
+}
