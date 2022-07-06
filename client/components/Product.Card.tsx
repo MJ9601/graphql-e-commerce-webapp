@@ -39,11 +39,11 @@ const ProductCard = ({
       }
     >
       <div className="absolute bg-red-500 py-1 px-3 rounded-full text-white text-sm right-2 top-1 font-bold">
-        {product.price}
+        ${product.price}
       </div>
       <img
         src={product.image}
-        className="w-full object-cover"
+        className="w-[200px] object-contain mx-auto"
         alt={product.name}
       />
       <div className="py-3 px-3">

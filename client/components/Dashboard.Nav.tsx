@@ -25,8 +25,11 @@ const DashboardNav = () => {
 
   const [getAllCats, { data: allCats }] = useAllCategoriesLazyQuery();
   const [getAllProducts, { data: allProducts }] = useAllProductsLazyQuery();
-  const [delAllCats] = useDelAllCatsMutation();
+
+  const [delAllCats, { data: delCats }] = useDelAllCatsMutation();
   const [delAllProducts] = useDeleteAllProductsMutation();
+
+  // console.log({ allCats });
 
   const dispatch = useAppDispatch();
   useEffect(() => {
@@ -82,10 +85,40 @@ const DashboardNav = () => {
               {" "}
               Add Category
             </h3>
-            <h3 className="catButton pt-0" onClick={() => delAllProducts()}>
+            <h3
+              className="catButton pt-0"
+              onClick={() =>
+                delAllProducts({
+                  update: (cache, { data }) => {
+                    cache.modify({
+                      fields: {
+                        allProducts(existingProducts = []) {
+                          return [];
+                        },
+                      },
+                    });
+                  },
+                })
+              }
+            >
               Delete All Products
             </h3>
-            <h3 className="catButton pt-0 -mt-2" onClick={() => delAllCats()}>
+            <h3
+              className="catButton pt-0 -mt-2"
+              onClick={() =>
+                delAllCats({
+                  update: (cache, { data }) => {
+                    cache.modify({
+                      fields: {
+                        allCategories(existingCats = []) {
+                          return [];
+                        },
+                      },
+                    });
+                  },
+                })
+              }
+            >
               Delete All Categories
             </h3>
           </div>

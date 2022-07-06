@@ -1,4 +1,5 @@
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { useMeQuery } from "../graphql/generated";
 import DashboardNav from "./Dashboard.Nav";
@@ -7,7 +8,8 @@ import HomeNav from "./Home.Nav";
 const Navbar = () => {
   const [showNav, setShowNav] = useState(true);
   const { data } = useMeQuery();
-  const user = data?.me;
+  const router = useRouter();
+  const homePage = router.pathname == "/" ? true : false;
   return (
     <div className="relative z-[100] md:z-0">
       <div
@@ -26,7 +28,7 @@ const Navbar = () => {
           )}
         </div>
 
-        {!user ? <HomeNav /> : <DashboardNav />}
+        {homePage ? <HomeNav /> : <DashboardNav />}
       </div>
     </div>
   );

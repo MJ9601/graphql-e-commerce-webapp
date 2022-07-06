@@ -67,6 +67,32 @@ export default class ProductResolver {
 
   // @Authorized()
 
+  // @Authorized()
+  @Authorized()
+  @Mutation(() => String)
+  async deleteAllProducts(@Ctx() context: Context) {
+    const { Admin } = context.user!;
+    if (!Admin) throw new ApolloError("Unauthorized!");
+
+    const deleteProducts = await this.productService.deleteProducts();
+
+    return "All Products have been removed";
+  }
+
+  @Authorized()
+  @Mutation(() => String)
+  async deleteOneProduct(
+    @Arg("input") input: GetProduct,
+    @Ctx() context: Context
+  ) {
+    const { Admin } = context.user!;
+    if (!Admin) throw new ApolloError("Unauthorized!");
+
+    const deleteProduct = await this.productService.deleteOneProduct(input);
+
+    return "Product has been removed";
+  }
+
   @Query(() => [Product])
   async allProducts() {
     const allProducts = await this.productService.findProducts();

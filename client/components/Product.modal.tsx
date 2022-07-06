@@ -1,5 +1,16 @@
+import { gql } from "@apollo/client";
 import { Box, Button, Modal, Typography } from "@mui/material";
 import React, { useState } from "react";
+import {
+  AllCategoriesDocument,
+  useAllCategoriesQuery,
+  useCreateProductMutation,
+} from "../graphql/generated";
+import { useAppDispatch, useAppSelector } from "../utils/cms/app/hooks";
+import {
+  selectAddProduct,
+  setCloseAddProductModel,
+} from "../utils/cms/features/adminNavSlic";
 
 const style = {
   position: "absolute" as "absolute",
@@ -14,14 +25,67 @@ const style = {
 };
 
 const Productmodal = () => {
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const addProductModel = useAppSelector(selectAddProduct);
+  const dispatch = useAppDispatch();
+  const handleClose = () => dispatch(setCloseAddProductModel());
+  const { data: cats } = useAllCategoriesQuery();
+
+  const [createProduct, { data, loading }] = useCreateProductMutation();
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new window.FormData(form);
+
+    const name = formData.get("name") as string;
+    const price = formData.get("price") as string;
+    const count = formData.get("count") as string;
+    const image = formData.get("image") as string;
+    const category = formData.get("category") as string;
+    const description = formData.get("description") as string;
+
+    console.log({ name, price, count, description, category, image });
+
+    if (!name || !price || !count || !image || !category || !description)
+      return alert("all the Field are needed");
+
+    createProduct({
+      variables: {
+        input: { category, count, description, name, price, image },
+      },
+      refetchQueries: [{ query: AllCategoriesDocument }],
+      update: (cache, data) => {
+        cache.modify({
+          fields: {
+            allProducts(existingData = []) {
+              const newProduct = cache.writeFragment({
+                data: data.data?.createProduct,
+                fragment: gql`
+                  fragment NewProduct on allProducts {
+                    name
+                    price
+                    image
+                    count
+                    description
+                    category
+                  }
+                `,
+              });
+              return [...existingData, newProduct];
+            },
+          },
+        });
+      },
+    });
+
+    form.reset();
+    dispatch(setCloseAddProductModel());
+  };
+
   return (
     <>
-      <Button onClick={handleOpen}>Open modal</Button>
       <Modal
-        open={open}
+        open={addProductModel}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
@@ -31,30 +95,40 @@ const Productmodal = () => {
             New Product
           </Typography>
           <div className="py-3 mt-3">
-            <form action="" className="w-full space-y-4">
+            <form
+              action=""
+              className="w-full space-y-4"
+              onSubmit={handleSubmit}
+            >
               <label htmlFor="" className="label">
                 Name:
-                <input type="text" className="input" />
+                <input type="text" className="input" name="name" />
               </label>
               <label htmlFor="" className="label">
                 Price:
-                <input type="text" className="input" />
+                <input type="number" className="input" name="price" />
               </label>
               <label htmlFor="" className="label">
                 Count:
-                <input type="text" className="input" />
+                <input type="number" className="input" name="count" />
+              </label>
+              <label htmlFor="" className="label">
+                Image:
+                <input type="text" className="input" name="image" />
               </label>
               <label htmlFor="" className="label">
                 Category:
-                <select className="input ">
-                  <option value="">Category name</option>
-                  <option value="">Category name</option>
-                  <option value="">Category name</option>
+                <select className="input " name="category">
+                  {cats?.allCategories.map((category) => (
+                    <option value={category._id} key={category._id}>
+                      {category.name}
+                    </option>
+                  ))}
                 </select>
               </label>
               <label htmlFor="" className="label">
                 Description:
-                <textarea className="input h-24" />
+                <textarea className="input h-24" name="description" />
               </label>
               <input type="submit" value="submit" className="submitButton" />
             </form>

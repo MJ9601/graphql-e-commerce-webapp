@@ -33,10 +33,10 @@ export const adminNavSlice = createSlice({
       state.addProduct = false;
     },
     setOpenAddCatModel: (state) => {
-      state.addProduct = true;
+      state.addCategory = true;
     },
     setCloseAddCatModel: (state) => {
-      state.addProduct = false;
+      state.addCategory = false;
     },
   },
 });

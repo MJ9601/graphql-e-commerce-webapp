@@ -1,5 +1,12 @@
+import { gql } from "@apollo/client";
 import { Box, Button, Modal, Typography } from "@mui/material";
 import React, { useState } from "react";
+import { useCreateCatMutation } from "../graphql/generated";
+import { useAppDispatch, useAppSelector } from "../utils/cms/app/hooks";
+import {
+  selectAddCat,
+  setCloseAddCatModel,
+} from "../utils/cms/features/adminNavSlic";
 
 const style = {
   position: "absolute" as "absolute",
@@ -14,14 +21,46 @@ const style = {
 };
 
 const Categorymodal = () => {
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const [name, setName] = useState("");
+  const addCatModel = useAppSelector(selectAddCat);
+  const dispatch = useAppDispatch();
+  const handleClose = () => dispatch(setCloseAddCatModel());
+  const [createCat, { data, loading }] = useCreateCatMutation();
+
+  const handelSubmit = (e: any) => {
+    e.preventDefault();
+    if (name) {
+      createCat({
+        variables: { input: { name } },
+        update: (cache, data) => {
+          cache.modify({
+            fields: {
+              allCategories(exsitingCats = []) {
+                const newCatsRef = cache.writeFragment({
+                  data: data.data?.createCat,
+                  fragment: gql`
+                    fragment NewCat on allCats {
+                      _id
+                      name
+                      products
+                    }
+                  `,
+                });
+                return [...exsitingCats, newCatsRef];
+              },
+            },
+          });
+        },
+      });
+    }
+    dispatch(setCloseAddCatModel());
+    setName("");
+  };
+
   return (
     <>
-      <Button onClick={handleOpen}>Open modal</Button>
       <Modal
-        open={open}
+        open={addCatModel}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
@@ -31,10 +70,19 @@ const Categorymodal = () => {
             New Category
           </Typography>
           <div className="py-3 mt-3">
-            <form action="" className="w-full space-y-4">
+            <form
+              action=""
+              className="w-full space-y-4"
+              onSubmit={handelSubmit}
+            >
               <label htmlFor="" className="label">
                 Name:
-                <input type="text" className="input" />
+                <input
+                  type="text"
+                  className="input"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
               </label>
               <input type="submit" value="submit" className="submitButton" />
             </form>

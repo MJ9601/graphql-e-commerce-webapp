@@ -75,7 +75,7 @@ export default class ProductService {
     return ProductModel.deleteOne(query);
   }
 
-  async deleteProducts(query: FilterQuery<Product>) {
+  async deleteProducts(query: FilterQuery<Product> = {}) {
     return ProductModel.deleteMany(query);
   }
 }

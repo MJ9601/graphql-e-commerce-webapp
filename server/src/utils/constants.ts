@@ -4,7 +4,7 @@ export const accTokenOptions: CookieOptions = {
   maxAge: 9e5,
   httpOnly: true,
   domain: "localhost",
-  sameSite: "strict",
+  sameSite: "lax",
   path: "/",
   secure: process.env.NODE_ENV === "production",
 };
