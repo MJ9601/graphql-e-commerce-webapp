@@ -35,11 +35,11 @@ const Header = () => {
               >
                 Login
               </h3>
-              <h2 className="md:hidden">
-                <Login
-                  className="text-2xl text-black mr-4 cursor-pointer"
-                  onClick={() => router.push("/auth/login")}
-                />
+              <h2
+                className="md:hidden"
+                onClick={() => router.push("/auth/login")}
+              >
+                <Login className="text-2xl text-black mr-4 cursor-pointer" />
               </h2>
             </>
           ) : (

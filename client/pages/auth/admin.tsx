@@ -1,9 +1,10 @@
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import Loginform from "../../components/Login.form";
 import { useMeQuery } from "../../graphql/generated";
 import withApollo from "../../utils/apolloClient";
 import { getDataFromTree } from "@apollo/client/react/ssr";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
 
 const Adminlogin = () => {
   const { data, error, loading, networkStatus } = useMeQuery({
@@ -13,7 +14,7 @@ const Adminlogin = () => {
   const router = useRouter();
 
   console.log({ data, error, networkStatus });
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (data?.me.Admin) router.push("/admin");
   }, [data]);
 
@@ -25,5 +26,3 @@ const Adminlogin = () => {
 };
 
 export default withApollo(Adminlogin, { getDataFromTree });
-
-// export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {};

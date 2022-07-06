@@ -8,6 +8,7 @@ import {
   UpdateProductDetailsDocument,
   useAllCategoriesQuery,
   useCreateProductMutation,
+  useProductQuery,
   useUpdateProductDetailsMutation,
 } from "../graphql/generated";
 import { useAppDispatch, useAppSelector } from "../utils/cms/app/hooks";
@@ -17,7 +18,7 @@ import {
   setCloseAddProductModel,
   setCloseUpdateProductModel,
 } from "../utils/cms/features/adminNavSlic";
-import { selectProduct } from "../utils/cms/features/productSlic";
+import { selectProduct, setProduct } from "../utils/cms/features/productSlic";
 
 const Productmodal = () => {
   const addProductModel = useAppSelector(selectAddProduct);
@@ -30,26 +31,26 @@ const Productmodal = () => {
   const updateModel = useAppSelector(selectUpdateProduct);
   const currentProduct = useAppSelector(selectProduct);
 
+  const { data: __product } = useProductQuery({
+    variables: { input: { productId: currentProduct?.productId as string } },
+  });
+
+  // dispatch(setProduct(__product?.product as Product));
+
   const [updatingProduct] = useUpdateProductDetailsMutation();
   const [createProduct] = useCreateProductMutation();
 
   const [name, setName] = useState(
-    currentProduct ? (currentProduct?.name as string) : ""
+    updateModel ? (currentProduct?.name as string) : ""
   );
-  const [price, setPrice] = useState(
-    currentProduct ? currentProduct?.price : ""
-  );
-  const [count, setCount] = useState(
-    currentProduct ? currentProduct?.count : ""
-  );
-  const [image, setImage] = useState(
-    currentProduct ? currentProduct?.image : ""
-  );
+  const [price, setPrice] = useState(updateModel ? currentProduct?.price : "");
+  const [count, setCount] = useState(updateModel ? currentProduct?.count : "");
+  const [image, setImage] = useState(updateModel ? currentProduct?.image : "");
   const [category, setCategory] = useState(
-    currentProduct ? currentProduct?.category?._id : ""
+    updateModel ? currentProduct?.category?._id : ""
   );
   const [description, setDescription] = useState(
-    currentProduct ? currentProduct?.description : ""
+    updateModel ? currentProduct?.description : ""
   );
 
   const handleSubmit = (e: any) => {

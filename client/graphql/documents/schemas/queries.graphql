@@ -51,6 +51,7 @@ query allCategories {
       _id
       name
       price
+      image
       count
     }
   }

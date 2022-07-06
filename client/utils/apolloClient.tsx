@@ -4,23 +4,32 @@ import {
   HttpLink,
   InMemoryCache,
 } from "@apollo/client";
+import { IncomingHttpHeaders } from "http";
+import { NextPageContext } from "next";
 import nextWithApollo from "next-with-apollo";
 import { useRouter } from "next/router";
 
+export const _ApolloClient = ({
+  initialState,
+  headers,
+}: {
+  headers: IncomingHttpHeaders | undefined;
+  initialState: any;
+}) =>
+  new ApolloClient({
+    link: new HttpLink({
+      uri: `${process.env.NEXT_PUBLIC_SERVER_ENDPOINT as string}`,
+      credentials: "include",
+    }),
+    headers: {
+      ...(headers as Record<string, string>),
+    },
+    cache: new InMemoryCache().restore(initialState || {}),
+  });
+
 const withApollo = nextWithApollo(
   ({ ctx, initialState, headers }) => {
-    console.log(ctx?.req?.headers.cookie);
-    return new ApolloClient({
-      link: new HttpLink({
-        uri: `${process.env.NEXT_PUBLIC_SERVER_ENDPOINT as string}`,
-        credentials: "include",
-      }),
-      headers: {
-        ...(headers as Record<string, string>),
-        cookie: ctx?.req?.headers.cookie as string,
-      },
-      cache: new InMemoryCache().restore(initialState || {}),
-    });
+    return _ApolloClient({ initialState, headers });
   },
   {
     render: ({ Page, props }) => {

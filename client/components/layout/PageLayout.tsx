@@ -28,7 +28,7 @@ const PageLayout = ({
         <div {...props} className="flex-1">
           {children}
         </div>
-        <Sidebar />
+        {/* <Sidebar /> */}
       </div>
       <Footer />
     </div>

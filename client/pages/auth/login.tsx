@@ -1,8 +1,20 @@
-import { useState } from "react";
+import { GetServerSidePropsContext } from "next";
+import { useRouter } from "next/router";
+import { useEffect, useLayoutEffect, useState } from "react";
 import Loginform from "../../components/Login.form";
+import { MeDocument, MeQuery, useMeQuery } from "../../graphql/generated";
+import withApollo, { _ApolloClient } from "../../utils/apolloClient";
+import { getDataFromTree } from "@apollo/client/react/ssr";
 
 const Login = () => {
+  const router = useRouter();
+  const { data } = useMeQuery();
+
   const [signUp, setSignUp] = useState(false);
+
+  useLayoutEffect(() => {
+    if (data?.me && !data.me.Admin) router.push("/dashboard");
+  }, [data]);
   return (
     <div className="grid w-[100vw] h-[100vh] place-items-center">
       <div>
@@ -20,4 +32,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default withApollo(Login, { getDataFromTree });

@@ -9,7 +9,7 @@ const Navbar = () => {
   const [showNav, setShowNav] = useState(true);
   const { data } = useMeQuery();
   const router = useRouter();
-  const homePage = router.pathname == "/" ? true : false;
+  const homePage = router.pathname == ("/" || "/product/:id") ? true : false;
   return (
     <div className="relative z-[100] md:z-0">
       <div

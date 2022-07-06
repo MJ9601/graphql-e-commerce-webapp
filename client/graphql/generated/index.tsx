@@ -471,7 +471,7 @@ export type FilterProductsBaseOnCatQuery = { __typename?: 'Query', filterProduct
 export type AllCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllCategoriesQuery = { __typename?: 'Query', allCategories: Array<{ __typename?: 'Category', _id: string, name: string, products: Array<{ __typename?: 'Product', _id: string, name: string, price: string, count: string }> }> };
+export type AllCategoriesQuery = { __typename?: 'Query', allCategories: Array<{ __typename?: 'Category', _id: string, name: string, products: Array<{ __typename?: 'Product', _id: string, name: string, price: string, image: string, count: string }> }> };
 
 export type AllProductsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1491,6 +1491,7 @@ export const AllCategoriesDocument = gql`
       _id
       name
       price
+      image
       count
     }
   }

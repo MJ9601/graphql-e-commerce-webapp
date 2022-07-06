@@ -7,6 +7,7 @@ import {
   Product,
   useDeleteOneProductMutation,
 } from "../graphql/generated";
+import { useAppDispatch } from "../utils/cms/app/hooks";
 import { setOpenUpdateProductModel } from "../utils/cms/features/adminNavSlic";
 import { setProduct } from "../utils/cms/features/productSlic";
 
@@ -25,7 +26,7 @@ const ProductCard = ({
   const router = useRouter();
 
   const [delProduct, { data }] = useDeleteOneProductMutation();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const rateAndCount: RateAndCount = product?.reviews?.reduce(
     (previous, current) => {
@@ -81,8 +82,10 @@ const ProductCard = ({
               <button
                 className="customButton"
                 onClick={() => {
-                  dispatch(setOpenUpdateProductModel());
-                  dispatch(setProduct(product as Product));
+                  if (product) {
+                    dispatch(setProduct(product));
+                    dispatch(setOpenUpdateProductModel());
+                  }
                 }}
               >
                 Update
