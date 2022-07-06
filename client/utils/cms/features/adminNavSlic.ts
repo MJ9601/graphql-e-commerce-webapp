@@ -5,6 +5,7 @@ type InitState = {
   adminPageDis: PageDis;
   addProduct: boolean;
   addCategory: boolean;
+  updateProduct: boolean;
 };
 
 export enum PageDis {
@@ -17,6 +18,7 @@ const initialState: InitState = {
   adminPageDis: PageDis.product,
   addProduct: false,
   addCategory: false,
+  updateProduct: false,
 };
 
 export const adminNavSlice = createSlice({
@@ -38,6 +40,12 @@ export const adminNavSlice = createSlice({
     setCloseAddCatModel: (state) => {
       state.addCategory = false;
     },
+    setOpenUpdateProductModel: (state) => {
+      state.updateProduct = true;
+    },
+    setCloseUpdateProductModel: (state) => {
+      state.updateProduct = false;
+    },
   },
 });
 
@@ -47,6 +55,8 @@ export const {
   setMainDisplay,
   setOpenAddCatModel,
   setOpenAddProductModel,
+  setCloseUpdateProductModel,
+  setOpenUpdateProductModel,
 } = adminNavSlice.actions;
 
 export const selectAdminPageDis = (state: RootState) =>
@@ -54,5 +64,7 @@ export const selectAdminPageDis = (state: RootState) =>
 export const selectAddProduct = (state: RootState) =>
   state.adminPage.addProduct;
 export const selectAddCat = (state: RootState) => state.adminPage.addCategory;
+export const selectUpdateProduct = (state: RootState) =>
+  state.adminPage.updateProduct;
 
 export const adminPageReducer = adminNavSlice.reducer;

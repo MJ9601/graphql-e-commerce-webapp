@@ -7,6 +7,8 @@ import {
   Product,
   useDeleteOneProductMutation,
 } from "../graphql/generated";
+import { setOpenUpdateProductModel } from "../utils/cms/features/adminNavSlic";
+import { setProduct } from "../utils/cms/features/productSlic";
 
 type RateAndCount = {
   rate: number;
@@ -76,7 +78,15 @@ const ProductCard = ({
               {product.description}
             </p>
             <div className="flex gap-4 justify-end items-center">
-              <button className="customButton">Update</button>
+              <button
+                className="customButton"
+                onClick={() => {
+                  dispatch(setOpenUpdateProductModel());
+                  dispatch(setProduct(product as Product));
+                }}
+              >
+                Update
+              </button>
               <button
                 className="customDelButton"
                 onClick={() => {

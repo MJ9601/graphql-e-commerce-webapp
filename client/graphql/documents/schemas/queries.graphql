@@ -64,6 +64,7 @@ query allProducts {
     price
     count
     image
+    description
     category {
       _id
       name
