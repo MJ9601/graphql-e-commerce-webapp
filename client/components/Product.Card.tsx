@@ -1,6 +1,12 @@
 import { Delete } from "@mui/icons-material";
 import { Router, useRouter } from "next/router";
-import { Product } from "../graphql/generated";
+import { useDispatch } from "react-redux";
+import {
+  AllCategoriesDocument,
+  AllProductsDocument,
+  Product,
+  useDeleteOneProductMutation,
+} from "../graphql/generated";
 
 type RateAndCount = {
   rate: number;
@@ -15,6 +21,9 @@ const ProductCard = ({
   AdminAccess: boolean;
 }) => {
   const router = useRouter();
+
+  const [delProduct, { data }] = useDeleteOneProductMutation();
+  const dispatch = useDispatch();
 
   const rateAndCount: RateAndCount = product?.reviews?.reduce(
     (previous, current) => {
@@ -68,7 +77,26 @@ const ProductCard = ({
             </p>
             <div className="flex gap-4 justify-end items-center">
               <button className="customButton">Update</button>
-              <button className="customDelButton">
+              <button
+                className="customDelButton"
+                onClick={() => {
+                  delProduct({
+                    variables: { input: { productId: product.productId } },
+                    refetchQueries: [AllCategoriesDocument],
+                    update: (cache) => {
+                      cache.updateQuery(
+                        { query: AllProductsDocument },
+                        (data) => ({
+                          allProducts: data.allProducts.filter(
+                            (_product: Product) =>
+                              _product.productId !== product.productId
+                          ),
+                        })
+                      );
+                    },
+                  });
+                }}
+              >
                 <Delete />
               </button>
             </div>

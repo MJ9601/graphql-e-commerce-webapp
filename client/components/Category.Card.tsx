@@ -1,5 +1,13 @@
 import { Delete } from "@mui/icons-material";
-import { Category, Product } from "../graphql/generated";
+import {
+  AllCategoriesDocument,
+  Category,
+  Product,
+  useAllCategoriesQuery,
+  useDelCatMutation,
+} from "../graphql/generated";
+import { useAppDispatch } from "../utils/cms/app/hooks";
+import { setCategories } from "../utils/cms/features/productSlic";
 
 const CategoryCard = ({
   category,
@@ -8,6 +16,12 @@ const CategoryCard = ({
   category: Category;
   AdminAccess: boolean;
 }) => {
+  const dispatch = useAppDispatch();
+  const { data } = useAllCategoriesQuery();
+
+  console.log({ data });
+
+  const [delCat, { data: deleted }] = useDelCatMutation();
   return (
     <div
       className={`${
@@ -20,7 +34,25 @@ const CategoryCard = ({
         {AdminAccess && (
           <div className="h-min">
             <div className="flex gap-4 justify-end items-center">
-              <button className="customDelButton">
+              <button
+                className="customDelButton"
+                onClick={() => {
+                  delCat({
+                    variables: { input: { _id: category._id } },
+                    update: (cache, data) => {
+                      cache.updateQuery(
+                        { query: AllCategoriesDocument },
+                        (data) => ({
+                          allCategories: data.allCategories.filter(
+                            (cat: any) => cat._id !== category._id
+                          ),
+                        })
+                      );
+                    },
+                  });
+                  dispatch(setCategories(data?.allCategories as Category[]));
+                }}
+              >
                 <Delete />
               </button>
             </div>
