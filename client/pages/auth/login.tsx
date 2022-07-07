@@ -11,6 +11,7 @@ const Login = () => {
   const { data } = useMeQuery();
 
   const [signUp, setSignUp] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   useLayoutEffect(() => {
     if (data?.me && !data.me.Admin) router.push("/dashboard");
@@ -18,7 +19,18 @@ const Login = () => {
   return (
     <div className="grid w-[100vw] h-[100vh] place-items-center">
       <div>
-        <Loginform AdminLogin={false} signUp={signUp} />
+        <>
+          {signUp ? (
+            <Loginform
+              AdminLogin={false}
+              signUp={signUp}
+              setSignUp={setSignUp}
+              setSuccess={setSuccess}
+            />
+          ) : (
+            <Loginform AdminLogin={false} signUp={signUp} />
+          )}
+        </>
         <div className="mt-10 flex justify-center items-center flex-col gap-2">
           <button
             className="catButton min-w-fit"

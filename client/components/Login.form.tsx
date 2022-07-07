@@ -1,17 +1,26 @@
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import { useLoginMutation } from "../graphql/generated";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import {
+  AllUsersDocument,
+  useCreateNormalUserMutation,
+  useLoginMutation,
+} from "../graphql/generated";
 
 const Loginform = ({
   AdminLogin,
   signUp,
+  setSignUp,
+  setSuccess,
 }: {
   AdminLogin: boolean;
   signUp: boolean;
+  setSignUp?: Dispatch<SetStateAction<boolean>>;
+  setSuccess?: Dispatch<SetStateAction<boolean>>;
 }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const [createUser, { data: user }] = useCreateNormalUserMutation();
 
   const [login, { data, error, loading }] = useLoginMutation({
     notifyOnNetworkStatusChange: true,
@@ -23,6 +32,22 @@ const Loginform = ({
     if (password && email) {
       if (!signUp) {
         login();
+      } else {
+        createUser({
+          variables: { input: { email, password } },
+          update: (cache, data) => {
+            cache.updateQuery(
+              {
+                query: AllUsersDocument,
+              },
+              (_data) => ({
+                allUsers: _data.allUsers.push(data.data?.createNormalUser),
+              })
+            );
+          },
+        });
+        if (setSuccess) setSuccess(true);
+        if (setSignUp) setSignUp(false);
       }
     }
     setEmail("");
@@ -30,7 +55,8 @@ const Loginform = ({
   };
 
   useEffect(() => {
-    if (data?.login.accessToken) router.push("/admin");
+    if (data?.login.accessToken && AdminLogin) router.push("/admin");
+    if (data?.login.accessToken && !AdminLogin) router.push("/dashboard");
   }, [data]);
 
   return (

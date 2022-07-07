@@ -8,8 +8,9 @@ import HomeNav from "./Home.Nav";
 const Navbar = () => {
   const [showNav, setShowNav] = useState(true);
   const { data } = useMeQuery();
-  const router = useRouter();
-  const homePage = router.pathname == ("/" || "/product/:id") ? true : false;
+  const router = useRouter().pathname;
+  const homePage =
+    router == "/" || router == "/product/[productId]" ? true : false;
   return (
     <div className="relative z-[100] md:z-0">
       <div
