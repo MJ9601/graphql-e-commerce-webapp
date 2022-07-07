@@ -56,7 +56,7 @@ const Loginform = ({
 
   useEffect(() => {
     if (data?.login.accessToken && AdminLogin) router.push("/admin");
-    if (data?.login.accessToken && !AdminLogin) router.push("/dashboard");
+    if (data?.login.accessToken && !AdminLogin) router.push("/");
   }, [data]);
 
   return (

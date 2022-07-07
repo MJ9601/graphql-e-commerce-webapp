@@ -1,6 +1,14 @@
+import { Delete } from "@mui/icons-material";
 import React from "react";
+import { Product } from "../graphql/generated";
 
-const ProductRow = ({ product }: { product: any }) => {
+const ProductRow = ({
+  product,
+  boughtProduct,
+}: {
+  product: Product;
+  boughtProduct?: boolean;
+}) => {
   return (
     <div className="rounded-md w-full ring-1 ring-gray-200 flex justify-between items-center overflow-hidden gap-4">
       <img
@@ -13,11 +21,14 @@ const ProductRow = ({ product }: { product: any }) => {
           price: <span className="text-green-500">$500</span>
         </h3>
       </div>
-      <div>
-        <button className="customButton">
-          Pay
-        </button>
-      </div>
+      {!boughtProduct && (
+        <div>
+          <button className="customButton">Pay</button>
+          <button className="customDelButton ">
+            <Delete />
+          </button>
+        </div>
+      )}
     </div>
   );
 };

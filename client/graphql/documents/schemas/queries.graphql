@@ -114,3 +114,23 @@ query filterProductsBaseOnCat($input: FilterProduct!) {
     }
   }
 }
+
+query User {
+  User {
+    _id
+    email
+    shoppingCard {
+      _id
+      productId
+      name
+      price
+      image
+    }
+    boughtProduct {
+      _id
+      name
+      price
+      image
+    }
+  }
+}

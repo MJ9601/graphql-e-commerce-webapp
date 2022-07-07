@@ -214,25 +214,6 @@ mutation addProductToBoughtList($input: AddProductToUser!) {
   }
 }
 
-mutation User {
-  User {
-    _id
-    email
-    shoppingCard {
-      _id
-      productId
-      name
-      price
-      image
-    }
-    boughtProduct {
-      _id
-      name
-      price
-      image
-    }
-  }
-}
 
 mutation deleteAllProducts {
   deleteAllProducts
