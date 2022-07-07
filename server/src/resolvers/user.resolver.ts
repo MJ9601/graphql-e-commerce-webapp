@@ -1,5 +1,7 @@
+import { Ref } from "@typegoose/typegoose";
 import { ApolloError } from "apollo-server";
 import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import { Product } from "../schema/product.schema";
 import {
   AddProductToUser,
   CreateAdminUserInput,
@@ -83,9 +85,13 @@ export default class UserResolver {
   ) {
     const { _id } = context.user!;
 
+    const user = await this.userService.findOneUserDePopulate({ _id });
+    if (!user) throw new ApolloError("User Does not exist");
+    const shoppingCard = [...user?.shoppingCard, product];
+
     return await this.userService.findOneUserAndUpdate(
       { _id },
-      { $addToSet: { shoppingCard: product } },
+      { $set: { shoppingCard } },
       { new: true }
     );
   }
@@ -97,16 +103,28 @@ export default class UserResolver {
     @Ctx() context: Context
   ) {
     const { _id } = context.user!;
-    const user = await this.userService.findOneUser({ _id });
+    const user = await this.userService.findOneUserDePopulate({ _id });
     if (!user) throw new ApolloError("InValid User");
     const _product = user.shoppingCard.find((item) => item === product);
     if (!_product) throw new ApolloError("Product not exsit in shopping cart");
 
-    const products = user.shoppingCard.filter((item) => item !== product);
+    let confirmed = false;
+
+    const shoppingCard: Ref<Product, string | undefined>[] =
+      user.shoppingCard.reduce(
+        (pre: Ref<Product, string | undefined>[], cur) => {
+          if (cur === product && !confirmed) {
+            confirmed = true;
+            return [...pre];
+          }
+          return [...pre, cur];
+        },
+        []
+      );
 
     const updateUser = await this.userService.findOneUserAndUpdate(
       { _id },
-      { $set: { shoppingCard: products } },
+      { $set: { shoppingCard } },
       { new: true }
     );
 
@@ -136,18 +154,57 @@ export default class UserResolver {
   ) {
     const { _id } = context.user!;
 
-    const user = await this.userService.findOneUser({ _id });
+    const user = await this.userService.findOneUserDePopulate({ _id });
     if (!user) throw new ApolloError("InValid User");
+
     const _product = user.shoppingCard.find((item) => item === product);
+
     if (!_product) throw new ApolloError("Product not exsit in shopping cart");
 
-    const products = user.shoppingCard.filter((item) => item !== product);
+    var confirmed = false;
+
+    const shoppingCard: Ref<Product, string | undefined>[] =
+      user.shoppingCard.reduce(
+        (pre: Ref<Product, string | undefined>[], cur) => {
+          if (cur === product && !confirmed) {
+            confirmed = true;
+            return [...pre];
+          }
+          return [...pre, cur];
+        },
+        []
+      );
+    const boughtProduct = [...user.boughtProduct, product];
 
     const updateUser = await this.userService.findOneUserAndUpdate(
       { _id },
       {
-        $set: { shoppingCard: products },
-        $addToSet: { boughtProduct: product },
+        $set: { shoppingCard, boughtProduct },
+      },
+      { new: true }
+    );
+
+    return updateUser;
+  }
+
+  // add product to boughtlist
+  @Authorized()
+  @Mutation(() => User)
+  async addAllProductToBoughtList(@Ctx() context: Context) {
+    const { _id } = context.user!;
+
+    const user = await this.userService.findOneUserDePopulate({ _id });
+    if (!user) throw new ApolloError("InValid User");
+    const _products = user.shoppingCard;
+    if (!_products.length)
+      throw new ApolloError("Product not exsit in shopping cart");
+
+    const products = [..._products, ...user.boughtProduct];
+
+    const updateUser = await this.userService.findOneUserAndUpdate(
+      { _id },
+      {
+        $set: { shoppingCard: [], boughtProduct: products },
       },
       { new: true }
     );
@@ -156,7 +213,7 @@ export default class UserResolver {
   }
 
   @Authorized()
-  @Mutation(() => User)
+  @Query(() => User)
   async User(@Ctx() context: Context) {
     const { _id } = context.user!;
 

@@ -46,6 +46,10 @@ class UserService {
       .lean();
   }
 
+  async findOneUserDePopulate(query: FilterQuery<CreateAdminUserInput>) {
+    return UserModel.findOne(query);
+  }
+
   async findAllUser(query: FilterQuery<CreateAdminUserInput> = {}) {
     return UserModel.find(query);
   }
