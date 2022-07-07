@@ -27,27 +27,19 @@ const Loginform = ({
     variables: { input: { email, password } },
   });
 
-  const handelSubmit = (e: any) => {
+  const handelSubmit = async (e: any) => {
     e.preventDefault();
     if (password && email) {
       if (!signUp) {
         login();
       } else {
+        if (setSuccess) setSuccess(true);
         createUser({
           variables: { input: { email, password } },
-          update: (cache, data) => {
-            cache.updateQuery(
-              {
-                query: AllUsersDocument,
-              },
-              (_data) => ({
-                allUsers: _data.allUsers.push(data.data?.createNormalUser),
-              })
-            );
-          },
+          update: (cache, data) => {},
         });
-        if (setSuccess) setSuccess(true);
         if (setSignUp) setSignUp(false);
+        if (setSuccess) setSuccess(false);
       }
     }
     setEmail("");

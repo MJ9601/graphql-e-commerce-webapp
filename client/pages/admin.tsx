@@ -17,6 +17,9 @@ import {
   selectUpdateProduct,
 } from "../utils/cms/features/adminNavSlic";
 import CategoryCard from "../components/Category.Card";
+import { useMeQuery } from "../graphql/generated";
+import { useRouter } from "next/router";
+import { useLayoutEffect } from "react";
 
 const Admin = () => {
   const categories = useAppSelector(selectCategories);
@@ -26,7 +29,13 @@ const Admin = () => {
   const _openProductModel = useAppSelector(selectAddProduct);
   // const addCategoryModel = useAppSelector(selectAddCat);
 
+  const router = useRouter();
+  const { data: me } = useMeQuery();
+
   // console.log({ data, networkStatus, loading });
+  useLayoutEffect(() => {
+    if (!me || !me.me.Admin) router.push("/auth/admin");
+  }, [me]);
 
   return (
     <PageLayout>

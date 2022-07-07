@@ -144,11 +144,55 @@ mutation createReviewAndRating($input: CreateRateAndReviewInput!) {
 }
 
 mutation deleteReview($input: DelReviewInput!) {
-  deleteReview(input: $input)
+  deleteReview(input: $input) {
+    _id
+    productId
+    name
+    description
+    price
+    count
+    image
+    category {
+      _id
+      name
+    }
+    reviews {
+      _id
+      description
+      rate
+      createdAt
+      user {
+        email
+        _id
+      }
+    }
+  }
 }
 
 mutation deleteReviewsOnProduct($input: DelReviewOnProductInput!) {
-  deleteReviewsOnProduct(input: $input)
+  deleteReviewsOnProduct(input: $input) {
+    _id
+    productId
+    name
+    description
+    price
+    count
+    image
+    category {
+      _id
+      name
+    }
+    reviews {
+      _id
+      description
+      rate
+      createdAt
+      user {
+        email
+        _id
+      }
+    }
+  }
 }
 
 mutation login($input: LoginInput!) {

@@ -5,11 +5,14 @@ import {
   useCreateRatingMutation,
   useCreateReviewAndRatingMutation,
   useCreateReviewMutation,
+  useMeQuery,
 } from "../graphql/generated";
 
 const ReviewFrom = ({ productId }: { productId: string }) => {
   const [rate, setRate] = useState(0);
   const [description, setDescription] = useState("");
+
+  const { data: me } = useMeQuery();
 
   const [createReview, { data }] = useCreateReviewMutation();
   const [createReviewAndRating] = useCreateReviewAndRatingMutation();
@@ -17,6 +20,8 @@ const ReviewFrom = ({ productId }: { productId: string }) => {
 
   const handelSubmit = (e: FormEvent) => {
     e.preventDefault();
+    if (!me) return;
+
     if (!rate && !description) return;
     else if (!rate && description)
       createReview({

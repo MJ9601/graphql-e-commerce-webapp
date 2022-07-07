@@ -33,7 +33,7 @@ export class Review {
   productId: Ref<Product>;
 
   @Field(() => String)
-  @prop({ required: true })
+  @prop()
   description: string;
 
   @Field(() => Number)
@@ -81,13 +81,13 @@ export class EditReviewInput extends CreateRateAndReviewInput {
 }
 
 @InputType()
-export class DelReviewInput {
-  @Field()
-  _id: string;
-}
-
-@InputType()
 export class DelReviewOnProductInput {
   @Field()
   productId: string;
+}
+
+@InputType()
+export class DelReviewInput extends DelReviewOnProductInput {
+  @Field()
+  _id: string;
 }

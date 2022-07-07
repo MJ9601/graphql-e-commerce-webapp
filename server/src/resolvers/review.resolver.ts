@@ -102,9 +102,9 @@ export default class ReviewResolver {
   // Admin only
   // delete on review
   @Authorized()
-  @Mutation(() => String)
+  @Mutation(() => Product)
   async deleteReview(
-    @Arg("input") { _id }: DelReviewInput,
+    @Arg("input") { _id, productId }: DelReviewInput,
     @Ctx() context: Context
   ) {
     const { Admin, _id: user } = context.user!;
@@ -112,12 +112,14 @@ export default class ReviewResolver {
 
     await this.reviewService.deleteOneReview({ _id });
 
-    return "Deleted";
+    const product = await this.productService.findOneProduct({ productId });
+
+    return product;
   }
 
   // delete all review of product
   @Authorized()
-  @Mutation(() => String)
+  @Mutation(() => Product)
   async deleteReviewsOnProduct(
     @Arg("input") { productId }: DelReviewOnProductInput,
     @Ctx() context: Context
@@ -128,10 +130,10 @@ export default class ReviewResolver {
 
     await this.reviewService.deleteOneProductReveiws({ productId });
     const product = await this.productService.findOneProductAndUpdate(
-      { _id: productId },
+      { productId },
       { $set: { reviews: [] } },
       { new: true }
     );
-    return "Deleted";
+    return product;
   }
 }

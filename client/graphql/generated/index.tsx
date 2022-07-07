@@ -80,6 +80,7 @@ export type DelCategory = {
 
 export type DelReviewInput = {
   _id: Scalars['String'];
+  productId: Scalars['String'];
 };
 
 export type DelReviewOnProductInput = {
@@ -122,8 +123,8 @@ export type Mutation = {
   delCat: Scalars['String'];
   deleteAllProducts: Scalars['String'];
   deleteOneProduct: Scalars['String'];
-  deleteReview: Scalars['String'];
-  deleteReviewsOnProduct: Scalars['String'];
+  deleteReview: Product;
+  deleteReviewsOnProduct: Product;
   login: LoginObject;
   logout: LoginObject;
   removeAllProductFromShoppingList: User;
@@ -365,14 +366,14 @@ export type DeleteReviewMutationVariables = Exact<{
 }>;
 
 
-export type DeleteReviewMutation = { __typename?: 'Mutation', deleteReview: string };
+export type DeleteReviewMutation = { __typename?: 'Mutation', deleteReview: { __typename?: 'Product', _id: string, productId: string, name: string, description: string, price: string, count: string, image: string, category?: { __typename?: 'Category', _id: string, name: string } | null, reviews: Array<{ __typename?: 'Review', _id: string, description: string, rate: number, createdAt: any, user: { __typename?: 'User', email: string, _id: string } } | null> } };
 
 export type DeleteReviewsOnProductMutationVariables = Exact<{
   input: DelReviewOnProductInput;
 }>;
 
 
-export type DeleteReviewsOnProductMutation = { __typename?: 'Mutation', deleteReviewsOnProduct: string };
+export type DeleteReviewsOnProductMutation = { __typename?: 'Mutation', deleteReviewsOnProduct: { __typename?: 'Product', _id: string, productId: string, name: string, description: string, price: string, count: string, image: string, category?: { __typename?: 'Category', _id: string, name: string } | null, reviews: Array<{ __typename?: 'Review', _id: string, description: string, rate: number, createdAt: any, user: { __typename?: 'User', email: string, _id: string } } | null> } };
 
 export type LoginMutationVariables = Exact<{
   input: LoginInput;
@@ -886,7 +887,29 @@ export type CreateReviewAndRatingMutationResult = Apollo.MutationResult<CreateRe
 export type CreateReviewAndRatingMutationOptions = Apollo.BaseMutationOptions<CreateReviewAndRatingMutation, CreateReviewAndRatingMutationVariables>;
 export const DeleteReviewDocument = gql`
     mutation deleteReview($input: DelReviewInput!) {
-  deleteReview(input: $input)
+  deleteReview(input: $input) {
+    _id
+    productId
+    name
+    description
+    price
+    count
+    image
+    category {
+      _id
+      name
+    }
+    reviews {
+      _id
+      description
+      rate
+      createdAt
+      user {
+        email
+        _id
+      }
+    }
+  }
 }
     `;
 export type DeleteReviewMutationFn = Apollo.MutationFunction<DeleteReviewMutation, DeleteReviewMutationVariables>;
@@ -917,7 +940,29 @@ export type DeleteReviewMutationResult = Apollo.MutationResult<DeleteReviewMutat
 export type DeleteReviewMutationOptions = Apollo.BaseMutationOptions<DeleteReviewMutation, DeleteReviewMutationVariables>;
 export const DeleteReviewsOnProductDocument = gql`
     mutation deleteReviewsOnProduct($input: DelReviewOnProductInput!) {
-  deleteReviewsOnProduct(input: $input)
+  deleteReviewsOnProduct(input: $input) {
+    _id
+    productId
+    name
+    description
+    price
+    count
+    image
+    category {
+      _id
+      name
+    }
+    reviews {
+      _id
+      description
+      rate
+      createdAt
+      user {
+        email
+        _id
+      }
+    }
+  }
 }
     `;
 export type DeleteReviewsOnProductMutationFn = Apollo.MutationFunction<DeleteReviewsOnProductMutation, DeleteReviewsOnProductMutationVariables>;

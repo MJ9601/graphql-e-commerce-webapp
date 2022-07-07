@@ -5,6 +5,7 @@ import Loginform from "../../components/Login.form";
 import { MeDocument, MeQuery, useMeQuery } from "../../graphql/generated";
 import withApollo, { _ApolloClient } from "../../utils/apolloClient";
 import { getDataFromTree } from "@apollo/client/react/ssr";
+import { Alert, Backdrop, CircularProgress } from "@mui/material";
 
 const Login = () => {
   const router = useRouter();
@@ -40,6 +41,14 @@ const Login = () => {
           </button>
         </div>
       </div>
+      {!signUp && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={success}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
     </div>
   );
 };

@@ -5,8 +5,10 @@ import withApollo from "../../utils/apolloClient";
 import { getDataFromTree } from "@apollo/client/react/ssr";
 import { useRouter } from "next/router";
 import {
+  ProductDocument,
   Review,
   useAddProductToShoppingListMutation,
+  useDeleteReviewsOnProductMutation,
   useMeQuery,
   useProductQuery,
   UserDocument,
@@ -22,6 +24,7 @@ const Product = () => {
 
   const { data: me } = useMeQuery();
   const [addProductToshop, {}] = useAddProductToShoppingListMutation();
+  const [deleteReviews] = useDeleteReviewsOnProductMutation();
 
   const handelAddProToShopClick = () => {
     if (!me) {
@@ -76,7 +79,20 @@ const Product = () => {
                 </div>
               </div>
               {me && me?.me.Admin ? (
-                <button className="customDelButton min-w-max">
+                <button
+                  className="customDelButton min-w-max"
+                  onClick={() =>
+                    deleteReviews({
+                      variables: { input: { productId: productId as string } },
+                      update: (cache, data) => {
+                        cache.writeQuery({
+                          query: ProductDocument,
+                          data: data.data?.deleteReviewsOnProduct,
+                        });
+                      },
+                    })
+                  }
+                >
                   Remove All Reviews
                 </button>
               ) : (
@@ -101,7 +117,11 @@ const Product = () => {
           <h4 className="text-lg mt-5 pt-5">Comments:</h4>
           <hr className="py-1 my-4" />
           {data?.product.reviews.map((review) => (
-            <ReviewCard review={review as Review} key={review?._id} />
+            <ReviewCard
+              review={review as Review}
+              key={review?._id}
+              productId={productId as string}
+            />
           ))}
         </div>
       </>

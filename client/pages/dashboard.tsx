@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useLayoutEffect } from "react";
 import PageLayout from "../components/layout/PageLayout";
 import ProductRow from "../components/Product.Row";
 import UpdatePasswordfrom from "../components/UpdatePassword.from";
@@ -12,10 +12,17 @@ import {
   UserDocument,
   useUserQuery,
 } from "../graphql/generated";
+import { useRouter } from "next/router";
 
 const Dashboard = () => {
   const mainDis = useAppSelector(selectUserPageDis);
   const { data, loading } = useUserQuery();
+
+  const router = useRouter();
+
+  useLayoutEffect(() => {
+    if (!data) router.push("/auth/login");
+  }, [data]);
 
   const [addAllProductToBought] = useAddAllProductToBoughtListMutation();
 
