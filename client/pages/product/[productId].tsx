@@ -4,7 +4,13 @@ import ReviewFrom from "../../components/Review.From";
 import withApollo from "../../utils/apolloClient";
 import { getDataFromTree } from "@apollo/client/react/ssr";
 import { useRouter } from "next/router";
-import { Review, useMeQuery, useProductQuery } from "../../graphql/generated";
+import {
+  Review,
+  useAddProductToShoppingListMutation,
+  useMeQuery,
+  useProductQuery,
+  UserDocument,
+} from "../../graphql/generated";
 import Head from "next/head";
 
 const Product = () => {
@@ -15,6 +21,24 @@ const Product = () => {
   });
 
   const { data: me } = useMeQuery();
+  const [addProductToshop, {}] = useAddProductToShoppingListMutation();
+
+  const handelAddProToShopClick = () => {
+    if (!me) {
+      router.push("/login");
+      return;
+    }
+
+    addProductToshop({
+      variables: { input: { product: data?.product._id as string } },
+      update: (cache, data) => {
+        cache.writeQuery({
+          query: UserDocument,
+          data: data.data?.addProductToShoppingList,
+        });
+      },
+    });
+  };
 
   return (
     <PageLayout>
@@ -56,7 +80,12 @@ const Product = () => {
                   Remove All Reviews
                 </button>
               ) : (
-                <button className="customButton min-w-max">Add To Card</button>
+                <button
+                  className="customButton min-w-max"
+                  onClick={handelAddProToShopClick}
+                >
+                  Add To Card
+                </button>
               )}
             </div>
             <h4 className="text-lg text-black font-semibold">Description: </h4>

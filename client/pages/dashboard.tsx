@@ -6,11 +6,23 @@ import withApollo from "../utils/apolloClient";
 import { getDataFromTree } from "@apollo/client/react/ssr";
 import { useAppSelector } from "../utils/cms/app/hooks";
 import { selectUserPageDis, UserOp } from "../utils/cms/features/userNavSlice";
-import { Product, useUserQuery } from "../graphql/generated";
+import {
+  Product,
+  useAddAllProductToBoughtListMutation,
+  UserDocument,
+  useUserQuery,
+} from "../graphql/generated";
 
 const Dashboard = () => {
   const mainDis = useAppSelector(selectUserPageDis);
   const { data, loading } = useUserQuery();
+
+  const [addAllProductToBought] = useAddAllProductToBoughtListMutation();
+
+  const counting = data?.User.shoppingCard.reduce((pre, cur) => {
+    return pre + Number(cur?.price);
+  }, 0);
+
   return (
     <PageLayout>
       <div className="py-3 px-6 ">
@@ -22,14 +34,30 @@ const Dashboard = () => {
                   shopping Card:
                 </h2>
                 <div className="space-y-2 py-3">
-                  {data?.User.shoppingCard.map((product) => (
+                  {data?.User.shoppingCard.map((product, index) => (
                     <ProductRow
                       product={product as Product}
-                      key={product?._id}
+                      key={`${product?._id}_${index}`}
                     />
                   ))}
                 </div>
-                <button className="customButton w-full">Pay All</button>
+                {counting !== 0 && (
+                  <button
+                    className="customButton w-full"
+                    onClick={() => {
+                      addAllProductToBought({
+                        update: (cache, data) => {
+                          cache.writeQuery({
+                            query: UserDocument,
+                            data: data.data?.addAllProductToBoughtList,
+                          });
+                        },
+                      });
+                    }}
+                  >
+                    Pay All <span className="ml-1">${counting}</span>
+                  </button>
+                )}
               </>
             )}
           </>
@@ -40,11 +68,11 @@ const Dashboard = () => {
                   Bought Products:
                 </h2>
                 <div className="space-y-2 py-3">
-                  {data?.User.boughtProduct.map((product) => (
+                  {data?.User.boughtProduct.map((product, index) => (
                     <ProductRow
                       product={product as Product}
                       boughtProduct
-                      key={product._id}
+                      key={`${product?._id}_${index}`}
                     />
                   ))}
                 </div>

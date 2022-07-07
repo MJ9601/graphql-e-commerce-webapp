@@ -107,6 +107,7 @@ export type LoginObject = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addAllProductToBoughtList: User;
   addProductToBoughtList: User;
   addProductToCat: Category;
   addProductToShoppingList: User;
@@ -431,6 +432,11 @@ export type AddProductToBoughtListMutationVariables = Exact<{
 
 
 export type AddProductToBoughtListMutation = { __typename?: 'Mutation', addProductToBoughtList: { __typename?: 'User', _id: string, email: string, shoppingCard: Array<{ __typename?: 'Product', _id: string, productId: string, name: string, price: string, image: string } | null>, boughtProduct: Array<{ __typename?: 'Product', _id: string, name: string, price: string, image: string }> } };
+
+export type AddAllProductToBoughtListMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AddAllProductToBoughtListMutation = { __typename?: 'Mutation', addAllProductToBoughtList: { __typename?: 'User', _id: string, email: string, shoppingCard: Array<{ __typename?: 'Product', _id: string, productId: string, name: string, price: string, image: string } | null>, boughtProduct: Array<{ __typename?: 'Product', _id: string, name: string, price: string, image: string }> } };
 
 export type DeleteAllProductsMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -1244,6 +1250,52 @@ export function useAddProductToBoughtListMutation(baseOptions?: Apollo.MutationH
 export type AddProductToBoughtListMutationHookResult = ReturnType<typeof useAddProductToBoughtListMutation>;
 export type AddProductToBoughtListMutationResult = Apollo.MutationResult<AddProductToBoughtListMutation>;
 export type AddProductToBoughtListMutationOptions = Apollo.BaseMutationOptions<AddProductToBoughtListMutation, AddProductToBoughtListMutationVariables>;
+export const AddAllProductToBoughtListDocument = gql`
+    mutation addAllProductToBoughtList {
+  addAllProductToBoughtList {
+    _id
+    email
+    shoppingCard {
+      _id
+      productId
+      name
+      price
+      image
+    }
+    boughtProduct {
+      _id
+      name
+      price
+      image
+    }
+  }
+}
+    `;
+export type AddAllProductToBoughtListMutationFn = Apollo.MutationFunction<AddAllProductToBoughtListMutation, AddAllProductToBoughtListMutationVariables>;
+
+/**
+ * __useAddAllProductToBoughtListMutation__
+ *
+ * To run a mutation, you first call `useAddAllProductToBoughtListMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddAllProductToBoughtListMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addAllProductToBoughtListMutation, { data, loading, error }] = useAddAllProductToBoughtListMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAddAllProductToBoughtListMutation(baseOptions?: Apollo.MutationHookOptions<AddAllProductToBoughtListMutation, AddAllProductToBoughtListMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddAllProductToBoughtListMutation, AddAllProductToBoughtListMutationVariables>(AddAllProductToBoughtListDocument, options);
+      }
+export type AddAllProductToBoughtListMutationHookResult = ReturnType<typeof useAddAllProductToBoughtListMutation>;
+export type AddAllProductToBoughtListMutationResult = Apollo.MutationResult<AddAllProductToBoughtListMutation>;
+export type AddAllProductToBoughtListMutationOptions = Apollo.BaseMutationOptions<AddAllProductToBoughtListMutation, AddAllProductToBoughtListMutationVariables>;
 export const DeleteAllProductsDocument = gql`
     mutation deleteAllProducts {
   deleteAllProducts

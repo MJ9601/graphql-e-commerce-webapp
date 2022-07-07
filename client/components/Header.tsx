@@ -18,7 +18,10 @@ const Header = () => {
   return (
     <div className="z-[100] bg-green-200 sticky top-0">
       <div className="flex container mx-auto justify-between items-center py-1">
-        <div className="flex justify-start gap-2 items-center ">
+        <div
+          className="flex justify-start gap-2 items-center cursor-pointer"
+          onClick={() => router.push("/")}
+        >
           <img
             src="images/logo.png"
             alt=""

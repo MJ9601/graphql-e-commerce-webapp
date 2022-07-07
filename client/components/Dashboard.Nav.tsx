@@ -7,6 +7,8 @@ import {
   useDelAllCatsMutation,
   useDeleteAllProductsMutation,
   useMeQuery,
+  UserDocument,
+  useRemoveAllProductFromShoppingListMutation,
 } from "../graphql/generated";
 import { useAppDispatch } from "../utils/cms/app/hooks";
 import {
@@ -29,6 +31,7 @@ const DashboardNav = () => {
 
   const [delAllCats, { data: delCats }] = useDelAllCatsMutation();
   const [delAllProducts] = useDeleteAllProductsMutation();
+  const [emptyShoplist] = useRemoveAllProductFromShoppingListMutation();
 
   // console.log({ allCats });
 
@@ -55,7 +58,21 @@ const DashboardNav = () => {
           >
             Bought Products
           </h3>
-          <h3 className="catButton pt-0 -mt-2">Empty Shopping Card</h3>
+          <h3
+            className="catButton pt-0 -mt-2"
+            onClick={() => {
+              emptyShoplist({
+                update: (cache, data) => {
+                  cache.writeQuery({
+                    query: UserDocument,
+                    data: data.data?.removeAllProductFromShoppingList,
+                  });
+                },
+              });
+            }}
+          >
+            Empty Shopping Card
+          </h3>
         </div>
       ) : (
         <>
