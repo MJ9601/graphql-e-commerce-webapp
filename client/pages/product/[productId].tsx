@@ -96,7 +96,7 @@ const Product = () => {
           <h4 className="text-lg mt-5 pt-5">Leave a Comment:</h4>
           <hr className="py-1 mt-4" />
           <div className="mt-4">
-            <ReviewFrom />
+            <ReviewFrom productId={data?.product.productId as string} />
           </div>
           <h4 className="text-lg mt-5 pt-5">Comments:</h4>
           <hr className="py-1 my-4" />

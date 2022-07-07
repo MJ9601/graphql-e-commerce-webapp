@@ -1,4 +1,5 @@
 import { ApolloError } from "apollo-server";
+import { reverse } from "lodash";
 import { Arg, Authorized, Ctx, Mutation, Resolver } from "type-graphql";
 import { CreateProductInput, Product } from "../schema/product.schema";
 import {
@@ -27,7 +28,7 @@ export default class ReviewResolver {
   }
 
   @Authorized()
-  @Mutation(() => Review)
+  @Mutation(() => Product)
   async createReview(
     @Arg("input") { description, productId }: CreateReviewInput,
     @Ctx() context: Context
@@ -46,11 +47,11 @@ export default class ReviewResolver {
       { new: true }
     );
 
-    return newReview;
+    return updateProduct;
   }
 
   @Authorized()
-  @Mutation(() => Review)
+  @Mutation(() => Product)
   async createRating(
     @Arg("input") { productId, rate }: CreateRateInput,
     @Ctx() context: Context
@@ -71,11 +72,11 @@ export default class ReviewResolver {
       { new: true }
     );
 
-    return newReview;
+    return updateProduct;
   }
 
   @Authorized()
-  @Mutation(() => Review)
+  @Mutation(() => Product)
   async createReviewAndRating(
     @Arg("input") { description, productId, rate }: CreateRateAndReviewInput,
     @Ctx() context: Context
@@ -95,7 +96,7 @@ export default class ReviewResolver {
       { new: true }
     );
 
-    return newReview;
+    return updateProduct;
   }
 
   // Admin only
@@ -126,6 +127,11 @@ export default class ReviewResolver {
     if (!Admin) throw new ApolloError("Unauthorized!");
 
     await this.reviewService.deleteOneProductReveiws({ productId });
+    const product = await this.productService.findOneProductAndUpdate(
+      { _id: productId },
+      { $set: { reviews: [] } },
+      { new: true }
+    );
     return "Deleted";
   }
 }

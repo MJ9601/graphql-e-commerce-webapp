@@ -16,6 +16,10 @@ query product($input: GetProduct!) {
       description
       rate
       createdAt
+      user {
+        email
+        _id
+      }
     }
   }
 }

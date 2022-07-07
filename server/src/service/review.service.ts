@@ -2,11 +2,15 @@ import { FilterQuery, QueryOptions, UpdateQuery } from "mongoose";
 import { Review, ReviewModel } from "../schema/review.schema";
 
 class ReviewService {
-  async createReview(input: Omit<Review, "_id" | "rate">) {
+  async createReview(
+    input: Omit<Review, "_id" | "rate" | "createdAt" | "updatedAt">
+  ) {
     return ReviewModel.create(input);
   }
 
-  async createReviewAndRate(input: Omit<Review, "_id">) {
+  async createReviewAndRate(
+    input: Omit<Review, "_id" | "createdAt" | "updatedAt">
+  ) {
     return ReviewModel.create(input);
   }
 

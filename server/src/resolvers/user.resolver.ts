@@ -85,7 +85,7 @@ export default class UserResolver {
   ) {
     const { _id } = context.user!;
 
-    const user = await this.userService.findOneUserDePopulate({ _id });
+    const user = await this.userService.findOneUserUnPopulated({ _id });
     if (!user) throw new ApolloError("User Does not exist");
     const shoppingCard = [...user?.shoppingCard, product];
 
@@ -103,7 +103,7 @@ export default class UserResolver {
     @Ctx() context: Context
   ) {
     const { _id } = context.user!;
-    const user = await this.userService.findOneUserDePopulate({ _id });
+    const user = await this.userService.findOneUserUnPopulated({ _id });
     if (!user) throw new ApolloError("InValid User");
     const _product = user.shoppingCard.find((item) => item === product);
     if (!_product) throw new ApolloError("Product not exsit in shopping cart");
@@ -154,7 +154,7 @@ export default class UserResolver {
   ) {
     const { _id } = context.user!;
 
-    const user = await this.userService.findOneUserDePopulate({ _id });
+    const user = await this.userService.findOneUserUnPopulated({ _id });
     if (!user) throw new ApolloError("InValid User");
 
     const _product = user.shoppingCard.find((item) => item === product);
@@ -193,7 +193,7 @@ export default class UserResolver {
   async addAllProductToBoughtList(@Ctx() context: Context) {
     const { _id } = context.user!;
 
-    const user = await this.userService.findOneUserDePopulate({ _id });
+    const user = await this.userService.findOneUserUnPopulated({ _id });
     if (!user) throw new ApolloError("InValid User");
     const _products = user.shoppingCard;
     if (!_products.length)

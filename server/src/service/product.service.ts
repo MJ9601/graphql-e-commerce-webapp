@@ -51,6 +51,10 @@ export default class ProductService {
       .lean();
   }
 
+  async findOneProductUnpopulated(query: FilterQuery<Product>) {
+    return ProductModel.findOne(query);
+  }
+
   async findOneProductAndUpdate(
     query: FilterQuery<Product>,
     update: UpdateQuery<Product>,

@@ -96,14 +96,14 @@ export default class ProductResolver {
   @Query(() => [Product])
   async allProducts() {
     const allProducts = await this.productService.findProducts();
-    console.log(allProducts);
+    // console.log(allProducts);
     return allProducts;
   }
 
   @Query(() => [Product])
   async filterProductsBaseOnCat(@Arg("input") input: FilterProduct) {
     const product = await this.productService.findProducts(input);
-    console.log(product);
+    // console.log(product);
     return product;
   }
 

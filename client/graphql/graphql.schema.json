@@ -1073,7 +1073,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "Review",
+                "name": "Product",
                 "ofType": null
               }
             },
@@ -1106,7 +1106,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "Review",
+                "name": "Product",
                 "ofType": null
               }
             },
@@ -1139,7 +1139,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "Review",
+                "name": "Product",
                 "ofType": null
               }
             },

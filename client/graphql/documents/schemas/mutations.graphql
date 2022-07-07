@@ -68,24 +68,78 @@ mutation updateProductDetails($input: UpdateProductInput!) {
 mutation createReview($input: CreateReviewInput!) {
   createReview(input: $input) {
     _id
+    productId
+    name
     description
-    rate
+    price
+    count
+    image
+    category {
+      _id
+      name
+    }
+    reviews {
+      _id
+      description
+      rate
+      createdAt
+      user {
+        email
+        _id
+      }
+    }
   }
 }
 
 mutation createRating($input: CreateRateInput!) {
   createRating(input: $input) {
     _id
+    productId
+    name
     description
-    rate
+    price
+    count
+    image
+    category {
+      _id
+      name
+    }
+    reviews {
+      _id
+      description
+      rate
+      createdAt
+      user {
+        email
+        _id
+      }
+    }
   }
 }
 
 mutation createReviewAndRating($input: CreateRateAndReviewInput!) {
   createReviewAndRating(input: $input) {
     _id
+    productId
+    name
     description
-    rate
+    price
+    count
+    image
+    category {
+      _id
+      name
+    }
+    reviews {
+      _id
+      description
+      rate
+      createdAt
+      user {
+        email
+        _id
+      }
+    }
   }
 }
 

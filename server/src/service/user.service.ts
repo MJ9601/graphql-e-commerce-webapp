@@ -46,7 +46,7 @@ class UserService {
       .lean();
   }
 
-  async findOneUserDePopulate(query: FilterQuery<CreateAdminUserInput>) {
+  async findOneUserUnPopulated(query: FilterQuery<CreateAdminUserInput>) {
     return UserModel.findOne(query);
   }
 

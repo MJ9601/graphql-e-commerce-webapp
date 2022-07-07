@@ -115,9 +115,9 @@ export type Mutation = {
   createCat: Category;
   createNormalUser: User;
   createProduct: Product;
-  createRating: Review;
-  createReview: Review;
-  createReviewAndRating: Review;
+  createRating: Product;
+  createReview: Product;
+  createReviewAndRating: Product;
   delAllCats: Scalars['String'];
   delCat: Scalars['String'];
   deleteAllProducts: Scalars['String'];
@@ -344,21 +344,21 @@ export type CreateReviewMutationVariables = Exact<{
 }>;
 
 
-export type CreateReviewMutation = { __typename?: 'Mutation', createReview: { __typename?: 'Review', _id: string, description: string, rate: number } };
+export type CreateReviewMutation = { __typename?: 'Mutation', createReview: { __typename?: 'Product', _id: string, productId: string, name: string, description: string, price: string, count: string, image: string, category?: { __typename?: 'Category', _id: string, name: string } | null, reviews: Array<{ __typename?: 'Review', _id: string, description: string, rate: number, createdAt: any, user: { __typename?: 'User', email: string, _id: string } } | null> } };
 
 export type CreateRatingMutationVariables = Exact<{
   input: CreateRateInput;
 }>;
 
 
-export type CreateRatingMutation = { __typename?: 'Mutation', createRating: { __typename?: 'Review', _id: string, description: string, rate: number } };
+export type CreateRatingMutation = { __typename?: 'Mutation', createRating: { __typename?: 'Product', _id: string, productId: string, name: string, description: string, price: string, count: string, image: string, category?: { __typename?: 'Category', _id: string, name: string } | null, reviews: Array<{ __typename?: 'Review', _id: string, description: string, rate: number, createdAt: any, user: { __typename?: 'User', email: string, _id: string } } | null> } };
 
 export type CreateReviewAndRatingMutationVariables = Exact<{
   input: CreateRateAndReviewInput;
 }>;
 
 
-export type CreateReviewAndRatingMutation = { __typename?: 'Mutation', createReviewAndRating: { __typename?: 'Review', _id: string, description: string, rate: number } };
+export type CreateReviewAndRatingMutation = { __typename?: 'Mutation', createReviewAndRating: { __typename?: 'Product', _id: string, productId: string, name: string, description: string, price: string, count: string, image: string, category?: { __typename?: 'Category', _id: string, name: string } | null, reviews: Array<{ __typename?: 'Review', _id: string, description: string, rate: number, createdAt: any, user: { __typename?: 'User', email: string, _id: string } } | null> } };
 
 export type DeleteReviewMutationVariables = Exact<{
   input: DelReviewInput;
@@ -455,7 +455,7 @@ export type ProductQueryVariables = Exact<{
 }>;
 
 
-export type ProductQuery = { __typename?: 'Query', product: { __typename?: 'Product', _id: string, productId: string, name: string, description: string, price: string, count: string, image: string, category?: { __typename?: 'Category', _id: string, name: string } | null, reviews: Array<{ __typename?: 'Review', _id: string, description: string, rate: number, createdAt: any } | null> } };
+export type ProductQuery = { __typename?: 'Query', product: { __typename?: 'Product', _id: string, productId: string, name: string, description: string, price: string, count: string, image: string, category?: { __typename?: 'Category', _id: string, name: string } | null, reviews: Array<{ __typename?: 'Review', _id: string, description: string, rate: number, createdAt: any, user: { __typename?: 'User', email: string, _id: string } } | null> } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -729,8 +729,26 @@ export const CreateReviewDocument = gql`
     mutation createReview($input: CreateReviewInput!) {
   createReview(input: $input) {
     _id
+    productId
+    name
     description
-    rate
+    price
+    count
+    image
+    category {
+      _id
+      name
+    }
+    reviews {
+      _id
+      description
+      rate
+      createdAt
+      user {
+        email
+        _id
+      }
+    }
   }
 }
     `;
@@ -764,8 +782,26 @@ export const CreateRatingDocument = gql`
     mutation createRating($input: CreateRateInput!) {
   createRating(input: $input) {
     _id
+    productId
+    name
     description
-    rate
+    price
+    count
+    image
+    category {
+      _id
+      name
+    }
+    reviews {
+      _id
+      description
+      rate
+      createdAt
+      user {
+        email
+        _id
+      }
+    }
   }
 }
     `;
@@ -799,8 +835,26 @@ export const CreateReviewAndRatingDocument = gql`
     mutation createReviewAndRating($input: CreateRateAndReviewInput!) {
   createReviewAndRating(input: $input) {
     _id
+    productId
+    name
     description
-    rate
+    price
+    count
+    image
+    category {
+      _id
+      name
+    }
+    reviews {
+      _id
+      description
+      rate
+      createdAt
+      user {
+        email
+        _id
+      }
+    }
   }
 }
     `;
@@ -1376,6 +1430,10 @@ export const ProductDocument = gql`
       description
       rate
       createdAt
+      user {
+        email
+        _id
+      }
     }
   }
 }
